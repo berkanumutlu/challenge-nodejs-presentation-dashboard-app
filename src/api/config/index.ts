@@ -8,5 +8,6 @@ export const appConfig: AppConfigType = {
     env: process.env.NODE_ENV as string,
     name: process.env.APP_NAME as string,
     url: process.env.APP_URL as string,
-    port: process.env.APP_PORT as string
+    port: process.env.APP_PORT as string,
+    loggingFile: process.env.APP_LOGGING_FILE as unknown as boolean
 };

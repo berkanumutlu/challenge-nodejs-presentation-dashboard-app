@@ -3,6 +3,7 @@ import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { appConfig } from "@/config";
 import responseHandler from "@/middlewares/responseHandler";
+import errorHandler from "@/middlewares/errorHandler";
 import routes from "@/routes";
 
 // Prisma Client instance
@@ -43,3 +44,6 @@ main().then(async () => {
     await prisma.$disconnect();
     process.exit(1);
 });
+
+// ErrorHandler
+server.use(errorHandler as express.ErrorRequestHandler);

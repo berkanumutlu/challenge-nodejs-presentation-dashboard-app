@@ -3,4 +3,5 @@ export type AppConfigType = {
     name: string;
     url: string;
     port: string;
+    loggingFile?: boolean;
 };
