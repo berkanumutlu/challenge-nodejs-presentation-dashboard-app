@@ -49,6 +49,18 @@ services:
     depends_on:
       - db
 
+  prisma:
+    container_name: presentation-dashboard-prisma
+    image: node:20.18.0-alpine
+    working_dir: /api
+    command: [ "npx", "prisma", "studio" ]
+    volumes:
+      - ./src/api:/api
+    ports:
+      - "5555:5555"
+    depends_on:
+      - db
+
 volumes:
   postgresdata:
     driver: local
