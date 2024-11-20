@@ -1,5 +1,5 @@
-import { Request, Response, Next } from '@/types/request';
-import { createNewLog } from '@/utils/logger';
+import { Request, Response, Next } from "@/types/request";
+import { createNewLog } from "@/utils/logger";
 
 const errorHandler = (
     err: Error,

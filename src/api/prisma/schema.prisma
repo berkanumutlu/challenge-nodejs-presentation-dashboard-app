@@ -39,6 +39,7 @@ enum UserRole {
 model Presentation {
   id        String    @id @unique @default(uuid())
   name      String
+  slug      String    @unique
   image     String?   @db.Text
   userId    String
   User      User      @relation(fields: [userId], references: [id])

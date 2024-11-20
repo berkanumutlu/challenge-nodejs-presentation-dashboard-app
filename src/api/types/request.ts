@@ -1,5 +1,5 @@
 import { Response as ExpressResponse, Request as ExpressRequest, NextFunction } from "express";
-import { UserModelType } from "./models";
+import { User } from "@prisma/client";
 
 export type Request = ExpressRequest & AuthenticatedRequest;
 export type Response = ExpressResponse & {
@@ -10,13 +10,5 @@ export type Response = ExpressResponse & {
 export type Next = NextFunction;
 export type AuthenticatedRequest = ExpressRequest & {
     token: string;
-    user: UserModelType;
-};
-export type RequestFilterType = {
-    select?: string[] | string,
-    selectInclude?: string[] | string,
-    where?: Record<string, any>,
-    limit?: number,
-    offset?: number,
-    order?: Record<string, 'ASC' | 'DESC'>
+    user: User;
 };

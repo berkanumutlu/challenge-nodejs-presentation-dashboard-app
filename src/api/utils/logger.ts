@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { Request, Response, Next } from '@/types/request';
-import { appConfig } from '@/config';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Request, Response, Next } from "@/types/request";
+import { appConfig } from "@/config";
 
 const date: string = new Date().toISOString();
 // const date: string = new Date().toISOString();
