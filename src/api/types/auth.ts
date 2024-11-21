@@ -1,8 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
-import { UserRole } from "@prisma/client";
-import { ParameterUserIdType } from "./parameter";
+import { User, UserRole } from "@prisma/client";
 
 export type JWTUserType = JwtPayload & {
-    id: ParameterUserIdType,
+    id: User,
     role: UserRole
 };

@@ -12,3 +12,11 @@ export type AuthenticatedRequest = ExpressRequest & {
     token: string;
     user: User;
 };
+export type RequestFilterType = {
+    select?: string[] | string,
+    where?: Record<string, any>,
+    include?: Record<string, any>,
+    limit?: number,
+    offset?: number,
+    orderBy?: Record<string, 'asc' | 'desc'>
+};

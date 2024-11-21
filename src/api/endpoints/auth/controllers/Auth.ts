@@ -25,7 +25,7 @@ export const login = async (req: Request, res: Response, next: Next) => {
     try {
         const { username, password } = req.body;
 
-        const record = await UserService.get({
+        const record = await UserService.getActive({
             where: { email: username },
             select: { id: true, password: true, role: true }
         });
@@ -55,7 +55,7 @@ export const me = async (req: AuthenticatedRequest, res: Response, next: Next) =
         const decoded = verifyToken(req.token);
         if (!decoded) return res.warning('Invalid token.', 403);
 
-        const user = await UserService.get({ where: { id: (decoded as any).id } });
+        const user = await UserService.getActive({ where: { id: (decoded as any).id } });
         if (!user) return res.warning('User not found.', 404);
         if (user.status !== true) return res.warning('Access denied.', 403);
 

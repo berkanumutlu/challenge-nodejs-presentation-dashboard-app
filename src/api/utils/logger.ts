@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 import { Request, Response, Next } from "@/types/request";
 import { appConfig } from "@/config";
 
@@ -21,7 +21,7 @@ export const createLogMessage = (err: Error, req: Request, res: Response): strin
 };
 // Creates a log file
 const createLogFile = (): string => {
-    const __filename = fileURLToPath(import.meta.url); // Get the parsed file path
+    // const __filename = fileURLToPath(import.meta.url); // Get the parsed file path
     const __dirname = path.dirname(__filename); // Get the name of the directory
     const logDirectory = path.join(__dirname, '../logs');
     const logFileName = `${date.slice(0, 10)}.log`;

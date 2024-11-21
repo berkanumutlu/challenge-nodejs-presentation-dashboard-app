@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import slugify from "slugify";
 import { bcryptConfig } from "@/config";
 
 export const encryptText = async (text: string, rounds: number = bcryptConfig.saltRounds): Promise<string> => {
@@ -18,7 +17,7 @@ export const encryptFields = async (data: Record<string, any> | Record<string, a
             data.map(async (item) => {
                 const updatedItem = { ...item };
                 for (const field of fields) {
-                    if (field in updatedItem && typeof updatedItem[field] === "string") {
+                    if (field in updatedItem && typeof updatedItem[field] === "string" && !await isEncrypted(updatedItem[field])) {
                         updatedItem[field] = await encryptText(updatedItem[field]);
                     }
                 }
@@ -28,24 +27,10 @@ export const encryptFields = async (data: Record<string, any> | Record<string, a
     } else {
         const updatedItem = { ...data };
         for (const field of fields) {
-            if (field in updatedItem && typeof updatedItem[field] === "string") {
+            if (field in updatedItem && typeof updatedItem[field] === "string" && !await isEncrypted(updatedItem[field])) {
                 updatedItem[field] = await encryptText(updatedItem[field]);
             }
         }
         return updatedItem;
     }
-};
-export const slugifyText = (text: string): string => {
-    return slugify(text, {
-        replacement: '-',  // replace spaces with replacement character, defaults to `-`
-        remove: undefined, // remove characters that match regex, defaults to `undefined`
-        lower: true,       // convert to lower case, defaults to `false`
-        strict: false,     // strip special characters except replacement, defaults to `false`
-        locale: 'en',      // language code of the locale to use
-        trim: true         // trim leading and trailing replacement chars, defaults to `true`
-    });
-};
-export const getRandomEnumValue = <T>(enumObject: T): T[keyof T] => {
-    const values = Object.values(enumObject as Array<T>) as T[keyof T][];
-    return values[Math.floor(Math.random() * values.length)];
 };
