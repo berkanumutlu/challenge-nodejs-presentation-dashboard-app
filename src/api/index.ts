@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { appConfig } from "@/config";
+import responseHandler from "@/middlewares/responseHandler";
+import errorHandler from "@/middlewares/errorHandler";
 import routes from "@/routes";
 
 // Prisma Client instance
@@ -15,6 +17,7 @@ const port = appConfig.port;
 // Middlewares
 server.use(cors());                     // Allows browsers to accept requests from different sources (origin). (Allows us to send requests to the API address.)
 server.use(express.json());             // If there is data in JSON format in the body of the incoming request, it automatically parses this data and places it in the req.body object.
+server.use(responseHandler as express.RequestHandler);
 
 // Route definitions
 server.use("/api", routes);
@@ -41,3 +44,6 @@ main().then(async () => {
     await prisma.$disconnect();
     process.exit(1);
 });
+
+// ErrorHandler
+server.use(errorHandler as express.ErrorRequestHandler);
