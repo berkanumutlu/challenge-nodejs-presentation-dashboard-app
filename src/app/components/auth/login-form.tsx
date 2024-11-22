@@ -30,6 +30,7 @@ export default function LoginForm() {
                 setError(result.error);
             } else if (result?.url) {
                 router.push(result.url);
+                router.refresh();
             }
         } catch (error) {
             console.error('Login failed:', error);
@@ -42,9 +43,7 @@ export default function LoginForm() {
     return (
         <form onSubmit={handleSubmit}>
             <div className="p-6 flex-1 space-y-6 bg-gray-50 rounded-lg">
-                <h1 className="mb-3 text-2xl">
-                    Please log in to continue.
-                </h1>
+                <h1 className="mb-3 text-2xl text-center">Login</h1>
                 <div className="w-full">
                     <div>
                         <label
