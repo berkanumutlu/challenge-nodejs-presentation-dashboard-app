@@ -4,15 +4,25 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { getAppName } from "@/lib/app";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+/* const sailec = localFont({
+  src: "./fonts/sailec.woff2",
+  variable: "--font-sailec",
   weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+  style: "normal",
+}); */
+
+const sailec = localFont({
+  src: [
+    { path: "./fonts/sailec/Sailec-Thin.ttf", weight: "100", style: "normal" },
+    { path: "./fonts/sailec/sailec-light.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/sailec/sailec-regular.otf", weight: "400", style: "normal" },
+    { path: "./fonts/sailec/Sailec-Medium.ttf", weight: "500", style: "normal" },
+    // { path: "./fonts/sailec/Sailec-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/sailec/sailec-bold.woff2", weight: "700", style: "normal" },
+    // { path: "./fonts/sailec/Sailec-ExtraBold.woff2", weight: "800", style: "normal" },
+    { path: "./fonts/sailec/sailec-black.ttf", weight: "900", style: "normal" },
+  ],
+  variable: "--font-sailec"
 });
 
 export const metadata: Metadata = {
@@ -31,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${sailec.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"

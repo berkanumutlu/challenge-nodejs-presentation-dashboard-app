@@ -13,11 +13,9 @@ interface HeaderProps {
 export default function Header({ user }: HeaderProps) {
 
     return (
-        <div className='h-[60px] bg-white'>
-            <div className="container mx-auto h-full py-4 px-2 xl:px-0 flex items-center justify-between">
-                <AppLogo />
-                <NavUser user={user} />
-            </div>
+        <div className="container py-4 px-2 xl:px-0 mx-auto h-[60px] flex items-center justify-between bg-white">
+            <AppLogo />
+            <NavUser user={user} />
         </div>
     )
 }

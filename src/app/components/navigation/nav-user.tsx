@@ -24,9 +24,9 @@ export function NavUser({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center space-x-2 cursor-pointer">
-                    <Avatar className="h-8 w-8 rounded-lg">
+                    <Avatar className="h-7 w-7 rounded-lg">
                         <AvatarImage src={user.avatar} alt={user.name} />
-                        <AvatarFallback className="bg-primary text-white rounded-full">D</AvatarFallback>
+                        <AvatarFallback className="bg-primary text-white rounded-full text-xs">D</AvatarFallback>
                     </Avatar>
                     <div className="grid text-left text-sm leading-tight">
                         <span className="truncate font-semibold">{user.name}</span>

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sailec);
 }
 
 @layer utilities {
@@ -25,7 +25,7 @@ body {
     --primary-hover: 234, 100%, 60%;
     --secondary: 298, 93%, 65%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --tertiary: 240, 17%, 11%;
+    --tertiary: 0, 0%, 14%;
     --tertiary-foreground: 309, 78%, 98%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;

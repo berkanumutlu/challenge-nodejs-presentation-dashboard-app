@@ -21,7 +21,7 @@ export default async function AdminLayout({
     return (
         <div className="flex flex-col min-h-screen">
             <Header user={session?.user} />
-            <main className="px-2 py-6 flex-grow bg-[#EFF2F8]">
+            <main className="px-2 py-7 flex-grow bg-[#EFF2F8]">
                 <div className="container mx-auto">
                     {children}
                 </div>

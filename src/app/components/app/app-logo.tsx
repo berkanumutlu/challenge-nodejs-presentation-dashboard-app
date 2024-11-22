@@ -26,8 +26,8 @@ export default function AppLogo() {
         <Image
             src={logoSrc}
             alt="App logo"
-            width={180}
-            height={38}
+            width={142}
+            height={22}
             priority
         />
     );
