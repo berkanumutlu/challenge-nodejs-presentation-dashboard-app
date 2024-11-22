@@ -3,6 +3,7 @@ export type AppConfigType = {
     name: string;
     url: string;
     port: string;
+    corsOrigin?: string;
     loggingFile?: boolean;
 };
 export type JwtConfigType = {

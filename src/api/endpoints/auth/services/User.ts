@@ -31,9 +31,15 @@ export const countActive = async (filters?: Prisma.UserFindManyArgs) => {
 };
 export const get = async (filters?: Prisma.UserFindUniqueArgs) => {
     if (!filters || !filters.where) {
-        throw new Error("A valid `where` condition is required to find a unique user.");
+        console.error("A valid `where` condition is required to find a unique user.");
+        return null;
     }
-    return prisma.user.findUnique(filters);
+    try {
+        return await prisma.user.findUnique(filters);
+    } catch (error) {
+        console.error("User find error:", error);
+        return null;
+    }
 };
 export const getActive = (filters?: Prisma.UserFindUniqueArgs) => {
     return get({
