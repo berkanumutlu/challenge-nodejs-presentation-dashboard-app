@@ -1,20 +1,34 @@
-import { ClipboardPen, Ellipsis, Trash } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
+import { ClipboardPen, MoreHorizontal, Trash } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-export function PresentationItemMenu() {
+interface PresentationItemMenuProps {
+    onRenameClick: () => void
+    onDelete: () => void
+}
+
+export function PresentationItemMenu({ onRenameClick, onDelete }: PresentationItemMenuProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className="text-[#9AA0AB] cursor-pointer"><Ellipsis /></div>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="max-w-56">
-                <DropdownMenuItem>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={onRenameClick}>
                     <ClipboardPen />
                     <span className="text-xs">Rename</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={onDelete}>
                     <Trash />
-                    <span className="text-xs">Trash</span>
+                    <span className="text-xs">Delete</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

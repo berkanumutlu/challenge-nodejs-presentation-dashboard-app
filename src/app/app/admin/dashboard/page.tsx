@@ -1,11 +1,9 @@
-import { Metadata } from "next";
-import React from "react";
+'use client'
+
+import React, { useState, useEffect } from "react";
 import { Plus, Sparkles } from "lucide-react";
 import PresentationItem from "@/components/presentation/presentation-item";
-
-export const metadata: Metadata = {
-    title: 'Dashboard'
-};
+import { RenameModal } from "@/components/presentation/rename-modal";
 
 async function fetchPresentations() {
     return {
@@ -75,8 +73,54 @@ async function fetchPresentations() {
     }
 }
 
-export default async function Page() {
-    const presentations = await fetchPresentations();
+export default function Dashboard() {
+    const [presentations, setPresentations] = useState<any>(null)
+    const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+    const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null)
+
+    useEffect(() => {
+        fetchPresentations().then(data => setPresentations(data))
+    }, [])
+
+    const handleRename = (id: string, newName: string) => {
+        setPresentations(prevState => ({
+            ...prevState,
+            data: {
+                ...prevState.data,
+                items: prevState.data.items.map(item =>
+                    item.id === id ? { ...item, name: newName } : item
+                )
+            }
+        }))
+    }
+
+    const handleDelete = (id: string) => {
+        setPresentations(prevState => ({
+            ...prevState,
+            data: {
+                ...prevState.data,
+                items: prevState.data.items.filter(item => item.id !== id),
+                meta: {
+                    ...prevState.data.meta,
+                    total: prevState.data.meta.total - 1
+                }
+            }
+        }))
+    }
+
+    const openRenameModal = (id: string) => {
+        setCurrentPresentationId(id)
+        setIsRenameModalOpen(true)
+    }
+
+    const closeRenameModal = () => {
+        setIsRenameModalOpen(false)
+        setCurrentPresentationId(null)
+    }
+
+    if (!presentations) return <div>Loading...</div>
+
+    const currentPresentation = presentations.data.items.find(item => item.id === currentPresentationId)
 
     return (
         <>
@@ -101,15 +145,31 @@ export default async function Page() {
                 <div className="space-y-1">
                     <h3 className="text-sm font-medium text-tertiary">Decks</h3>
                     <h4 className="text-xs font-medium text-[#9AA0AB]">
-                        {presentations?.data?.meta?.total} files
+                        {presentations.data.meta.total} files
                     </h4>
                 </div>
                 <div className="flex flex-wrap gap-5">
-                    {presentations && presentations?.data?.items?.map((presentation: any) => (
-                        <PresentationItem key={presentation.id} data={presentation} />
+                    {presentations.data.items.map((presentation: any) => (
+                        <PresentationItem
+                            key={presentation.id}
+                            data={presentation}
+                            onRenameClick={() => openRenameModal(presentation.id)}
+                            onDelete={() => handleDelete(presentation.id)}
+                        />
                     ))}
                 </div>
             </div>
+            {currentPresentation && (
+                <RenameModal
+                    isOpen={isRenameModalOpen}
+                    onClose={closeRenameModal}
+                    onRename={(newName) => {
+                        handleRename(currentPresentation.id, newName)
+                        closeRenameModal()
+                    }}
+                    currentName={currentPresentation.name}
+                />
+            )}
         </>
-    );
+    )
 }

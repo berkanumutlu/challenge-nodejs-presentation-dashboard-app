@@ -6,7 +6,7 @@ interface PresentationItemProps {
     data: {
         id: string;
         name: string;
-        thumbnailImage: string;
+        thumbnailImage: string | null;
         status: boolean;
         updatedAt: string;
         User: {
@@ -17,18 +17,23 @@ interface PresentationItemProps {
             createdAt: string;
         }
     };
+    onRenameClick: () => void;
+    onDelete: () => void;
 }
 
-export default function PresentationItem({ data }: PresentationItemProps) {
+export default function PresentationItem({ data, onRenameClick, onDelete }: PresentationItemProps) {
     return (
         <Card className="w-full md:w-80 lg:w-72 p-4">
             <CardHeader className="p-0 mb-3">
                 <CardTitle className="mb-1 space-x-5 flex flex-col justify-between md:flex-row text-sm text-[#242424]">
                     <p className="overflow-hidden text-ellipsis whitespace-nowrap">{data.name}</p>
-                    <PresentationItemMenu />
+                    <PresentationItemMenu
+                        onRenameClick={onRenameClick}
+                        onDelete={onDelete}
+                    />
                 </CardTitle>
                 <CardDescription className="text-xs font-normal text-[#9AA0AB]">
-                    Last update: {data.updatedAt}
+                    Last update: {new Date(data.updatedAt).toLocaleDateString()}
                 </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
@@ -39,7 +44,7 @@ export default function PresentationItem({ data }: PresentationItemProps) {
                         width={250}
                         height={141}
                         priority
-                        className="w-full h-36"
+                        className="w-full h-36 object-cover"
                     />
                 </div>
             </CardContent>
