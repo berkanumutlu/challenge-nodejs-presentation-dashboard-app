@@ -109,6 +109,12 @@ $ docker-compose stop
   ![Home](screenshots/homepage.png)
 - Admin Login Page
   ![Admin Login Page](screenshots/admin_login_page.png)
+- Dashboard
+  ![Dashboard](screenshots/dashboard.png)
+- Create Presentation Modal
+  ![Create Presentation Modal](screenshots/create-presentation-modal.png)
+- Rename Presentation Modal
+  ![Rename Presentation Modal](screenshots/rename-presentation-modal.png)
 
 ## License
 

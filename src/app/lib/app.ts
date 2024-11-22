@@ -1,0 +1,1 @@
+export const getAppName = () => process.env.NEXT_PUBLIC_APP_NAME || 'Default App Name';

@@ -27,11 +27,17 @@ export const countActive = async (filters?: Prisma.PresentationFindManyArgs) => 
         }
     });
 };
-export const get = (filters?: Prisma.PresentationFindUniqueArgs) => {
+export const get = async (filters?: Prisma.PresentationFindUniqueArgs) => {
     if (!filters || !filters.where) {
-        throw new Error("A valid `where` condition is required to find a unique presentation.");
+        console.error("A valid `where` condition is required to find a unique presentation.");
+        return null;
     }
-    return prisma.presentation.findUnique(filters);
+    try {
+        return await prisma.presentation.findUnique(filters);
+    } catch (error) {
+        console.error("Presentation find error:", error);
+        return null;
+    }
 };
 export const getActive = (filters?: Prisma.PresentationFindUniqueArgs) => {
     return get({

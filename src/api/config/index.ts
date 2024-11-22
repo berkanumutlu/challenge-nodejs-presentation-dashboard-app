@@ -9,6 +9,7 @@ export const appConfig: AppConfigType = {
     name: process.env.APP_NAME as string,
     url: process.env.APP_URL as string,
     port: process.env.APP_PORT as string,
+    corsOrigin: process.env.APP_CORS_ORIGIN as string,
     loggingFile: process.env.APP_LOGGING_FILE as unknown as boolean
 };
 export const jwtConfig: JwtConfigType = {
