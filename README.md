@@ -116,6 +116,10 @@ $ docker-compose stop
 - Rename Presentation Modal
   ![Rename Presentation Modal](screenshots/rename-presentation-modal.png)
 
+## Preview
+
+Video url: https://www.loom.com/share/cf82b552a7d04a1084123ea33e85e1e1?sid=9038fd59-3cdf-4742-a8d2-1e313203bff5
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
