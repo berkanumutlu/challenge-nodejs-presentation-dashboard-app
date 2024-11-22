@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Sparkles } from "lucide-react";
 import PresentationItem from "@/components/presentation/presentation-item";
 import { RenameModal } from "@/components/presentation/rename-modal";
+import { CreatePresentationModal } from "@/components/presentation/create-presentation-modal";
 
 async function fetchPresentations() {
     return {
@@ -76,6 +77,7 @@ async function fetchPresentations() {
 export default function Dashboard() {
     const [presentations, setPresentations] = useState<any>(null)
     const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null)
 
     useEffect(() => {
@@ -108,6 +110,31 @@ export default function Dashboard() {
         }))
     }
 
+    const handleCreate = (name: string, image: File | null) => {
+        const newPresentation = {
+            id: Date.now().toString(), // Use a proper UUID in a real application
+            name: name,
+            thumbnailImage: image ? URL.createObjectURL(image) : null,
+            status: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            deletedAt: null,
+            User: presentations.data.items[0].User // Use the first user as a placeholder
+        }
+
+        setPresentations(prevState => ({
+            ...prevState,
+            data: {
+                ...prevState.data,
+                items: [newPresentation, ...prevState.data.items],
+                meta: {
+                    ...prevState.data.meta,
+                    total: prevState.data.meta.total + 1
+                }
+            }
+        }))
+    }
+
     const openRenameModal = (id: string) => {
         setCurrentPresentationId(id)
         setIsRenameModalOpen(true)
@@ -127,7 +154,10 @@ export default function Dashboard() {
             <div className="space-y-5 mb-5">
                 <h3 className="text-sm font-medium text-tertiary">Create a presentation</h3>
                 <div className="flex flex-row gap-x-4">
-                    <div className="h-40 w-72 space-y-2 flex flex-col justify-center items-center bg-white rounded-sm shadow-md hover:shadow-lg cursor-pointer">
+                    <div
+                        className="h-40 w-72 space-y-2 flex flex-col justify-center items-center bg-white rounded-sm shadow-md hover:shadow-lg cursor-pointer"
+                        onClick={() => setIsCreateModalOpen(true)}
+                    >
                         <div className="p-3 inline-flex bg-primary rounded-sm text-white">
                             <Plus width={25} height={25} />
                         </div>
@@ -170,6 +200,11 @@ export default function Dashboard() {
                     currentName={currentPresentation.name}
                 />
             )}
+            <CreatePresentationModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                onCreate={handleCreate}
+            />
         </>
     )
 }
