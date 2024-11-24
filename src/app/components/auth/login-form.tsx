@@ -25,7 +25,6 @@ export default function LoginForm() {
                 redirect: false,
                 callbackUrl: '/admin/dashboard'
             });
-
             if (result?.error) {
                 setError(result.error);
             } else if (result?.url) {

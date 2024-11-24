@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Plus, Sparkles } from "lucide-react";
@@ -81,15 +81,15 @@ export default function Dashboard() {
     const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null)
 
     useEffect(() => {
-        fetchPresentations().then(data => setPresentations(data))
-    }, [])
+        fetchPresentations().then(data => setPresentations(data));
+    }, []);
 
     const handleRename = (id: string, newName: string) => {
-        setPresentations(prevState => ({
+        setPresentations((prevState) => ({
             ...prevState,
             data: {
                 ...prevState.data,
-                items: prevState.data.items.map(item =>
+                items: prevState.data.items.map((item) =>
                     item.id === id ? { ...item, name: newName } : item
                 )
             }
@@ -97,11 +97,11 @@ export default function Dashboard() {
     }
 
     const handleDelete = (id: string) => {
-        setPresentations(prevState => ({
+        setPresentations((prevState) => ({
             ...prevState,
             data: {
                 ...prevState.data,
-                items: prevState.data.items.filter(item => item.id !== id),
+                items: prevState.data.items.filter((item) => item.id !== id),
                 meta: {
                     ...prevState.data.meta,
                     total: prevState.data.meta.total - 1

@@ -1,5 +1,10 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import AppLogo from "@/components/app/app-logo";
+
+export const metadata: Metadata = {
+  title: "Home"
+}
 
 export default function Home() {
   return (
