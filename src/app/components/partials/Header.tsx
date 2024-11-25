@@ -13,7 +13,7 @@ interface HeaderProps {
 export default function Header({ user }: HeaderProps) {
 
     return (
-        <div className="container py-4 px-2 xl:px-0 mx-auto h-[60px] flex items-center justify-between bg-white">
+        <div className="mx-auto py-5 px-2 xl:px-8 w-full h-[60px] flex items-center justify-between bg-white">
             <AppLogo />
             <NavUser user={user} />
         </div>
