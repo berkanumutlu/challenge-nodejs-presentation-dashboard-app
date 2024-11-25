@@ -105,20 +105,45 @@ $ docker-compose stop
 
 ## Screenshots
 
-- Home
-  ![Home](screenshots/homepage.png)
-- Admin Login Page
-  ![Admin Login Page](screenshots/admin_login_page.png)
-- Dashboard
-  ![Dashboard](screenshots/dashboard.png)
-- Create Presentation Modal
-  ![Create Presentation Modal](screenshots/create-presentation-modal.png)
-- Rename Presentation Modal
-  ![Rename Presentation Modal](screenshots/rename-presentation-modal.png)
+<ul>
+    <li>
+        <p>Home Page & Admin Login Page</p>
+        <p align="center">
+            <img src="screenshots/home_page.png" alt="Home page" width="49%" />
+            <img src="screenshots/admin_login_page.png" alt="Admin Login Page" width="49%" />
+        </p>
+    </li>
+    <li>
+        <p>Dashboard</p>
+        <p align="center">
+            <img src="screenshots/dashboard.png" alt="Dashboard" />
+        </p>
+    </li>
+    <li>
+        <p>Create Presentation Modal</p>
+        <p align="center">
+            <img src="screenshots/create_presentation_modal.png" alt="Create Presentation Modal" width="49%" />
+            <img src="screenshots/create_presentation_modal_valid_form.png" alt="Create Presentation Modal Valid Form" width="49%" />
+        </p>
+    </li>
+    <li>
+        <p>Presentation Item Menu</p>
+        <p align="center">
+            <img src="screenshots/presentation_item_menu.png" alt="Presentation Item Menu" />
+        </p>
+    </li>
+    <li>
+        <p>Rename & Delete Presentation Modal</p>
+        <p align="center">
+            <img src="screenshots/rename_presentation_modal.png" alt="Rename Presentation Modal" width="49%" />
+            <img src="screenshots/delete_presentation_modal.png" alt="Delete Presentation Modal" width="49%" />
+        </p>
+    </li>
+</ul>
 
 ## Preview
 
-Video url: https://www.loom.com/share/cf82b552a7d04a1084123ea33e85e1e1?sid=9038fd59-3cdf-4742-a8d2-1e313203bff5
+[![Presentation Dashboard App Preview Video](https://cdn.loom.com/sessions/thumbnails/cf82b552a7d04a1084123ea33e85e1e1-f586746bd56ce04d-full-play.gif)](ttps://www.loom.com/share/cf82b552a7d04a1084123ea33e85e1e1?sid=9038fd59-3cdf-4742-a8d2-1e313203bff5)
 
 ## License
 
