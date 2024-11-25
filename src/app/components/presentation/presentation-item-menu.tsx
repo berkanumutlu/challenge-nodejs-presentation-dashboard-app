@@ -1,4 +1,4 @@
-import { ClipboardPen, MoreHorizontal, Trash } from "lucide-react";
+import { ClipboardPen, MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 
@@ -23,8 +23,8 @@ export function PresentationItemMenu({ onRenameClick, onDeleteClick, isOpen, set
                     <ClipboardPen className="mr-2 w-4 h-4" />
                     <span className="text-xs">Rename</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => { onDeleteClick(); setIsOpen(false); }}>
-                    <Trash className="mr-2 w-4 h-4" />
+                <DropdownMenuItem onSelect={() => { onDeleteClick(); setIsOpen(false); }} className="text-red-600">
+                    <Trash2 className="mr-2 w-4 h-4" />
                     <span className="text-xs">Delete</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>

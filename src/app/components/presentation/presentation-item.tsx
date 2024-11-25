@@ -29,7 +29,7 @@ export default function PresentationItem({ data, onRenameClick, onDeleteClick: o
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
-        <Card className="w-full md:w-80 lg:w-72 p-4 relative shadow-[5px_5px_8px_0px_rgba(0,0,0,.05)] hover:shadow-[5px_5px_8px_5px_rgba(0,0,0,.05)]">
+        <Card className="p-4 w-full md:w-80 xl:w-72 relative shadow-[5px_5px_8px_0px_rgba(0,0,0,.05)] hover:shadow-[5px_5px_8px_5px_rgba(0,0,0,.05)]">
             <CardHeader className="p-0 mb-3">
                 <CardTitle className="mb-1 space-x-5 flex flex-row items-center justify-between text-sm text-[#242424]">
                     <p className="text-ellipsis overflow-hidden whitespace-nowrap">{data.name}</p>

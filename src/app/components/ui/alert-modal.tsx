@@ -45,7 +45,7 @@ export function AlertModal({
                     <AlertDialogCancel
                         onClick={onClose}
                         className={cn(
-                            "bg-gray-100 hover:bg-gray-200 text-black",
+                            "bg-transparent hover:bg-gray-100 text-tertiary border-none",
                             cancelClassName
                         )}
                     >
