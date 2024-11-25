@@ -28,10 +28,6 @@ export function NavUser({
                         <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback className="bg-primary text-white rounded-full text-xs">D</AvatarFallback>
                     </Avatar>
-                    <div className="grid text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">{user.name}</span>
-                        <span className="truncate text-xs">{user.email}</span>
-                    </div>
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg" side="bottom" align="end" sideOffset={4}>

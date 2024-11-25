@@ -1,36 +1,36 @@
+import axios, { AxiosRequestConfig } from "axios";
 import { getSession } from "next-auth/react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api';
+const axiosInstance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
 
-export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
-    const url = `${API_URL}${endpoint}`;
-    console.log('Fetching from URL:', url);
+export async function fetchAPI(endpoint: string, options: AxiosRequestConfig = {}) {
     try {
-        const res = await fetch(url, {
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-
-        if (!res.ok && res.status === 500) {
-            const errorText = await res.text();
-            console.error('API error:', res.status, errorText);
-            throw new Error(`API error: ${res.status} - ${errorText}`);
+        if (options?.data) {
+            options.data = JSON.stringify(options.data);
         }
-
-        return await res.json();
+        const response = await axiosInstance({
+            url: endpoint,
+            ...options
+        });
+        return response.data;
     } catch (error) {
-        console.error('Fetch error:', error);
-        if (error instanceof TypeError && error.message === 'fetch failed') {
-            console.error('API server may be down or unreachable. Please check if it\'s running on the correct port.');
+        if (axios.isAxiosError(error)) {
+            console.error('Axios error:', error?.message);
+            if (error?.status === 500) {
+                throw new Error(`API error: ${error.status} - ${error?.response?.data}`);
+            }
+        } else {
+            console.error('Fetch error:', error);
         }
         throw error;
     }
 }
-
-export async function fetchAPIWithAuth(endpoint: string, options: RequestInit = {}) {
+export async function fetchAPIWithAuth(endpoint: string, options: AxiosRequestConfig = {}) {
     const session = await getSession();
     return await fetchAPI(endpoint, {
         ...options,
