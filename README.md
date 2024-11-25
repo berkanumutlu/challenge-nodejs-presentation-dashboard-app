@@ -13,7 +13,7 @@
     <a href="https://nextjs.org/docs/14" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/next-v14.2.18-black?logo=nextdotjs&logoColor=white&labelColor=black" alt="Next.JS Version"></a>
      <a href="https://18.react.dev" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/React-v18.3.1-087EA4?logo=react&logoColor=white&labelColor=087EA4" alt="React Version"></a>
     <a href="https://tailwindcss.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Tailwind-v3.4.15-06B6D4?logo=tailwindcss&logoColor=white&labelColor=06B6D4" alt="Tailwind Version"></a>
-    <a href="https://ui.shadcn.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/shadcn/ui-v2.0.6-black?logo=shadcnui&logoColor=white&labelColor=black" alt="shadcn/ui Version"></a>
+    <a href="https://ui.shadcn.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/shadcn/ui-v2.1.6-black?logo=shadcnui&logoColor=white&labelColor=black" alt="shadcn/ui Version"></a>
     <a href="https://www.prisma.io" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Prisma-v5.22.1-2D3748?logo=prisma&logoColor=white&labelColor=2D3748" alt="Prisma Version"></a>
     <a href="https://www.postgresql.org/docs/release/15.7" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/PostgreSQL-v15.7-4169E1?logo=postgresql&logoColor=white&labelColor=4169E1" alt="PostgreSQL Version"></a>
     <a href="https://www.npmjs.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/NPM-v10.8.2-CB3837?logo=npm&logoColor=F7F7F7&labelColor=CB3837" alt="NPM Version"></a>
@@ -143,7 +143,7 @@ $ docker-compose stop
 
 ## Preview
 
-[![Presentation Dashboard App Preview Video](https://cdn.loom.com/sessions/thumbnails/cf82b552a7d04a1084123ea33e85e1e1-f586746bd56ce04d-full-play.gif)](ttps://www.loom.com/share/cf82b552a7d04a1084123ea33e85e1e1?sid=9038fd59-3cdf-4742-a8d2-1e313203bff5)
+[![Presentation Dashboard App Preview Video](https://cdn.loom.com/sessions/thumbnails/cf82b552a7d04a1084123ea33e85e1e1-f586746bd56ce04d-full-play.gif)](https://www.loom.com/share/cf82b552a7d04a1084123ea33e85e1e1?sid=9038fd59-3cdf-4742-a8d2-1e313203bff5)
 
 ## License
 
