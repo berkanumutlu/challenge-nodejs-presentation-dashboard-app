@@ -4,12 +4,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 interface PresentationItemMenuProps {
     onRenameClick: () => void;
-    onDelete: () => void;
+    onDeleteClick: () => void;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
 }
 
-export function PresentationItemMenu({ onRenameClick, onDelete, isOpen, setIsOpen }: PresentationItemMenuProps) {
+export function PresentationItemMenu({ onRenameClick, onDeleteClick, isOpen, setIsOpen }: PresentationItemMenuProps) {
     return (
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
@@ -23,7 +23,7 @@ export function PresentationItemMenu({ onRenameClick, onDelete, isOpen, setIsOpe
                     <ClipboardPen className="mr-2 w-4 h-4" />
                     <span className="text-xs">Rename</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => { onDelete(); setIsOpen(false); }}>
+                <DropdownMenuItem onSelect={() => { onDeleteClick(); setIsOpen(false); }}>
                     <Trash className="mr-2 w-4 h-4" />
                     <span className="text-xs">Delete</span>
                 </DropdownMenuItem>

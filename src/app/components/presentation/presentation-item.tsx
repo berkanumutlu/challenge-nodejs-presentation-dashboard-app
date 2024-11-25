@@ -22,10 +22,10 @@ interface PresentationItemProps {
         }
     };
     onRenameClick: () => void;
-    onDelete: () => void;
+    onDeleteClick: () => void;
 }
 
-export default function PresentationItem({ data, onRenameClick, onDelete }: PresentationItemProps) {
+export default function PresentationItem({ data, onRenameClick, onDeleteClick: onDeleteClick }: PresentationItemProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
@@ -34,10 +34,10 @@ export default function PresentationItem({ data, onRenameClick, onDelete }: Pres
                 <CardTitle className="mb-1 space-x-5 flex flex-row items-center justify-between text-sm text-[#242424]">
                     <p className="text-ellipsis overflow-hidden whitespace-nowrap">{data.name}</p>
                     <PresentationItemMenu
-                        onRenameClick={onRenameClick}
-                        onDelete={onDelete}
                         isOpen={isMenuOpen}
                         setIsOpen={setIsMenuOpen}
+                        onRenameClick={onRenameClick}
+                        onDeleteClick={onDeleteClick}
                     />
                 </CardTitle>
                 <CardDescription className="text-xs font-normal text-[#9AA0AB]">

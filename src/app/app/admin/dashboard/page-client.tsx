@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Sparkles } from "lucide-react";
 import PresentationItem from "@/components/presentation/presentation-item";
-import { RenameModal } from "@/components/modals/rename-modal";
-import { CreatePresentationModal } from "@/components/modals/create-presentation-modal";
+import { RenamePresentationModal } from "@/components/modals/presentation/rename-modal";
+import { CreatePresentationModal } from "@/components/modals/presentation/create-modal";
+import { AlertModal } from "@/components/ui/alert-modal";
 
 async function fetchPresentations() {
     return {
@@ -78,7 +79,9 @@ export default function DashboardPageClient() {
     const [presentations, setPresentations] = useState<any>(null);
     const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
     const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null);
+    const [presentationToDelete, setPresentationToDelete] = useState<string | null>(null);
 
     useEffect(() => {
         fetchPresentations().then(data => setPresentations(data));
@@ -94,8 +97,7 @@ export default function DashboardPageClient() {
                 )
             }
         }));
-    }
-
+    };
     const handleDelete = (id: string) => {
         setPresentations((prevState) => ({
             ...prevState,
@@ -108,8 +110,7 @@ export default function DashboardPageClient() {
                 }
             }
         }));
-    }
-
+    };
     const handleCreate = (name: string, image: File | null) => {
         const newPresentation = {
             id: Date.now().toString(), // Use a proper UUID in a real application
@@ -139,17 +140,31 @@ export default function DashboardPageClient() {
         setCurrentPresentationId(id);
         setIsRenameModalOpen(true);
     };
-
     const closeRenameModal = () => {
         setIsRenameModalOpen(false);
         setCurrentPresentationId(null);
+    };
+
+    const openAlertModal = (id: string) => {
+        setPresentationToDelete(id);
+        setIsAlertModalOpen(true);
+    };
+    const closeAlertModal = () => {
+        setIsAlertModalOpen(false);
+        setPresentationToDelete(null);
+    };
+    const confirmDelete = () => {
+        if (presentationToDelete) {
+            handleDelete(presentationToDelete);
+        }
+        closeAlertModal();
     };
 
     if (!presentations) {
         return (<div>Loading...</div>)
     }
 
-    const currentPresentation = presentations.data.items.find(item => item.id === currentPresentationId);
+    const currentPresentation = presentations.data.items.find((item) => item.id === currentPresentationId);
 
     return (
         <>
@@ -186,13 +201,13 @@ export default function DashboardPageClient() {
                             key={presentation.id}
                             data={presentation}
                             onRenameClick={() => openRenameModal(presentation.id)}
-                            onDelete={() => handleDelete(presentation.id)}
+                            onDeleteClick={() => openAlertModal(presentation.id)}
                         />
                     ))}
                 </div>
             </div>
             {currentPresentation && (
-                <RenameModal
+                <RenamePresentationModal
                     isOpen={isRenameModalOpen}
                     onClose={closeRenameModal}
                     onRename={(newName) => {
@@ -206,6 +221,15 @@ export default function DashboardPageClient() {
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
                 onCreate={handleCreate}
+            />
+            <AlertModal
+                isOpen={isAlertModalOpen}
+                onClose={closeAlertModal}
+                onConfirm={confirmDelete}
+                title="Delete Confirmation"
+                description="Are you sure you want to delete this presentation? This action cannot be undone."
+                confirmClassName="bg-red-500 hover:bg-red-600"
+                cancelClassName="bg-gray-300 hover:bg-gray-400"
             />
         </>
     )
