@@ -1,20 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import PresentationList from "@/components/presentation/presentation-list";
 import PresentationCreateList from "@/components/presentation/presentation-create-list";
-import { fetchPresentations } from "@/lib/presentation";
 
 export default function DashboardPageClient() {
-    const [presentations, setPresentations] = useState<any>(null);
+
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    useEffect(() => {
-        fetchPresentations().then((data) => setPresentations(data));
-    }, []);
+
 
     const handleRename = (id: string, newName: string) => {
-        setPresentations((prevState) => ({
+        /* setPresentations((prevState) => ({
             ...prevState,
             data: {
                 ...prevState.data,
@@ -22,11 +19,11 @@ export default function DashboardPageClient() {
                     item.id === id ? { ...item, name: newName } : item
                 )
             }
-        }));
+        })); */
     };
 
     const handleDelete = (id: string) => {
-        setPresentations((prevState) => ({
+        /* setPresentations((prevState) => ({
             ...prevState,
             data: {
                 ...prevState.data,
@@ -36,11 +33,11 @@ export default function DashboardPageClient() {
                     total: prevState.data.meta.total - 1
                 }
             }
-        }));
+        })); */
     };
 
     const handleCreate = (name: string, image: File | null) => {
-        const newPresentation = {
+        /* const newPresentation = {
             id: Date.now().toString(),
             name,
             thumbnailImage: image ? URL.createObjectURL(image) : null,
@@ -61,7 +58,7 @@ export default function DashboardPageClient() {
                     total: prevState.data.meta.total + 1
                 }
             }
-        }));
+        })); */
     };
 
     return (
@@ -72,7 +69,6 @@ export default function DashboardPageClient() {
                 handleCreate={handleCreate}
             />
             <PresentationList
-                presentations={presentations}
                 onRename={handleRename}
                 onDelete={handleDelete}
             />

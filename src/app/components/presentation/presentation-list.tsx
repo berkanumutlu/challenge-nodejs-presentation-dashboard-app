@@ -1,26 +1,38 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { presentationService } from "@/lib/presentation";
 import PresentationItem from "@/components/presentation/presentation-item";
 import { RenamePresentationModal } from "@/components/modals/presentation/rename-modal";
 import { AlertModal } from "@/components/ui/alert-modal";
 import { createPresentationItemsSkeleton } from "@/components/ui/skeletons/presentation";
 
 interface PresentationListProps {
-    presentations: any;
     onRename: (id: string, newName: string) => void;
     onDelete: (id: string) => void;
 }
 
 export default function PresentationList({
-    presentations,
     onRename,
     onDelete
 }: PresentationListProps) {
+    const [presentations, setPresentations] = useState<any>(null);
     const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
     const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
     const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null);
     const [presentationToDelete, setPresentationToDelete] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchPresentationsData() {
+            try {
+                const response = await presentationService.list();
+                setPresentations(response.data);
+            } catch (error) {
+                console.error("Error fetching presentations:", error);
+            }
+        }
+        fetchPresentationsData();
+    }, []);
 
     const openRenameModal = (id: string) => {
         setCurrentPresentationId(id);
@@ -47,7 +59,7 @@ export default function PresentationList({
         closeAlertModal();
     };
 
-    const currentPresentation = presentations?.data?.items?.find(
+    const currentPresentation = presentations?.items?.find(
         (item: any) => item.id === currentPresentationId
     );
 
@@ -56,12 +68,12 @@ export default function PresentationList({
             <div className="space-y-1 mb-5">
                 <h3 className="text-sm font-medium text-tertiary">Decks</h3>
                 <h4 className="text-xs font-medium text-[#9AA0AB]">
-                    {presentations?.data?.meta?.total || 0}{" "}{presentations?.data?.meta?.total > 1 ? "files" : "file"}
+                    {presentations?.meta?.total || 0}{" "}{presentations?.meta?.total > 1 ? "files" : "file"}
                 </h4>
             </div>
             <div className="flex flex-wrap gap-5 xl:gap-x-3">
                 {presentations ? (
-                    presentations.data.items.map((presentation: any) => (
+                    presentations?.items.map((presentation: any) => (
                         <PresentationItem
                             key={presentation.id}
                             data={presentation}

@@ -41,6 +41,12 @@ export const prepareRequestFilters = async (filters?: RequestFilterType, req?: R
             }
         }
 
+        if (filters?.orderBy) {
+            preparedFilters.orderBy = Object.entries(filters.orderBy).map(([key, value]) => ({
+                [key]: value.toLowerCase()
+            }));
+        }
+
         if (filters?.select) {
             preparedFilters.select = Array.isArray(filters.select)
                 ? filters.select.reduce((acc, field) => ({ ...acc, [field]: true }), {})

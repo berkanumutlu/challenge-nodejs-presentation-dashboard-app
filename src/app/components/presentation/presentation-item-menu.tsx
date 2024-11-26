@@ -13,9 +13,9 @@ export function PresentationItemMenu({ onRenameClick, onDeleteClick, isOpen, set
     return (
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0 text-[#9AA0AB]">
+                <Button variant="ghost" className="h-4 p-0 text-[#9AA0AB]">
                     <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
+                    <MoreHorizontal className="w-4 h-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

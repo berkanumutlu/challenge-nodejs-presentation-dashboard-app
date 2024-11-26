@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import Header from "@/components/partials/Header";
-import Footer from "@/components/partials/Footer";
+import Header from "@/components/partials/admin/Header";
+import Footer from "@/components/partials/admin/Footer";
 
 export default async function AdminLayout({
     children
