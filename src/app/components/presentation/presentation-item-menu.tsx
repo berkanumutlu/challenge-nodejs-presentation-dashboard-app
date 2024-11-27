@@ -13,7 +13,7 @@ export function PresentationItemMenu({ onRenameClick, onDeleteClick, isOpen, set
     return (
         <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-4 p-0 text-[#9AA0AB]">
+                <Button variant="ghost" className="h-4 p-0 text-[#9AA0AB] focus-visible:ring-0 focus-visible:ring-offset-0">
                     <span className="sr-only">Open menu</span>
                     <MoreHorizontal className="w-4 h-4" />
                 </Button>

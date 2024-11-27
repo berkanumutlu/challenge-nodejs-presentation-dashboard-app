@@ -38,8 +38,8 @@ export function RenamePresentationModal({ isOpen, onClose, onRename, currentName
             isOpen={isOpen}
             onClose={onClose}
             title="Rename Presentation"
-            onSubmit={handleRename}
-            submitText="Rename"
+            onButtonClick={handleRename}
+            buttonText="Rename"
             isLoading={isLoading}
             isSubmitDisabled={!isFormValid}
         >

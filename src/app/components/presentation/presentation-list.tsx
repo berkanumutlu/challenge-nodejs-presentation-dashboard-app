@@ -7,15 +7,7 @@ import { RenamePresentationModal } from "@/components/modals/presentation/rename
 import { AlertModal } from "@/components/ui/alert-modal";
 import { createPresentationItemsSkeleton } from "@/components/ui/skeletons/presentation";
 
-interface PresentationListProps {
-    onRename: (id: string, newName: string) => void;
-    onDelete: (id: string) => void;
-}
-
-export default function PresentationList({
-    onRename,
-    onDelete
-}: PresentationListProps) {
+export default function PresentationList() {
     const [presentations, setPresentations] = useState<any>(null);
     const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
     const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
@@ -32,7 +24,37 @@ export default function PresentationList({
             }
         }
         fetchPresentationsData();
+
+        window.addEventListener('presentationCreated', fetchPresentationsData);
+        return () => {
+            window.removeEventListener('presentationCreated', fetchPresentationsData);
+        };
     }, []);
+
+    const onRename = (id: string, newName: string) => {
+        setPresentations((prevState) => ({
+            ...prevState,
+            data: {
+                ...prevState.data,
+                items: prevState.data.items.map((item) =>
+                    item.id === id ? { ...item, name: newName } : item
+                )
+            }
+        }));
+    };
+    const onDelete = (id: string) => {
+        setPresentations((prevState) => ({
+            ...prevState,
+            data: {
+                ...prevState.data,
+                items: prevState.data.items.filter((item) => item.id !== id),
+                meta: {
+                    ...prevState.data.meta,
+                    total: prevState.data.meta.total - 1
+                }
+            }
+        }));
+    };
 
     const openRenameModal = (id: string) => {
         setCurrentPresentationId(id);

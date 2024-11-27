@@ -2,9 +2,10 @@ import { AxiosRequestConfig } from "axios";
 import { RequestFilterType } from "@/types/request";
 import { CreatePresentationType, UpdatePresentationType } from "@/types/presentation";
 import { createRequestFilters } from "@/utils/request";
+import { uploadFile } from "@/utils/upload";
+import { isValidUrl } from "@/utils/text";
 import { fetchAPIWithAuth } from "./api";
-
-export const presentationPlaceholderImageUrl = '/presentation/placeholder.png';
+import { getPresentationPlaceholderImage, getPresentationUploadFilePath } from "./app";
 
 const routePrefix = '/presentation';
 export async function fetchPresentation(endpoint: string, options: AxiosRequestConfig = {}) {
@@ -44,7 +45,22 @@ export const presentationService = {
     },
     create: async (data: CreatePresentationType) => {
         try {
+            let thumbnailImageName = '';
+            if (data?.thumbnailImage instanceof File) {
+                const uploadFileResponse = await uploadFile(data.thumbnailImage, 'presentations');
+                if (uploadFileResponse?.success && uploadFileResponse?.data?.fileName) {
+                    thumbnailImageName = uploadFileResponse.data.fileName;
+                } else {
+                    throw new Error(uploadFileResponse.message || 'File upload failed.');
+                }
+            }
 
+            const requestData = {
+                ...data,
+                thumbnailImage: thumbnailImageName || null
+            };
+
+            return await fetchPresentation('/create', { method: 'POST', data: requestData });
         } catch (error) {
             console.error('Presentation create error:', error);
             throw error;
@@ -58,7 +74,7 @@ export const presentationService = {
             throw error;
         }
     },
-    delete: () => {
+    delete: async (id: string) => {
         try {
 
         } catch (error) {
@@ -66,7 +82,7 @@ export const presentationService = {
             throw error;
         }
     },
-    restore: () => {
+    restore: async (id: string) => {
         try {
 
         } catch (error) {
@@ -75,3 +91,13 @@ export const presentationService = {
         }
     }
 };
+
+export function getPresentationImageUrl(imagePath?: string | null): string {
+    if (!imagePath) {
+        return getPresentationPlaceholderImage();
+    }
+    if (isValidUrl(imagePath)) {
+        return imagePath;
+    }
+    return `${getPresentationUploadFilePath()}/${imagePath}`;
+}

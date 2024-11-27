@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { presentationPlaceholderImageUrl } from "@/lib/presentation";
-import { formatDateToString } from "@/utils/date";
+import { getPresentationImageUrl } from "@/lib/presentation";
+import { areDatesEqual, formatDateToString } from "@/utils/date";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PresentationItemMenu } from "./presentation-item-menu";
 
@@ -13,7 +13,9 @@ interface PresentationItemProps {
         name: string;
         thumbnailImage: string | null;
         status: boolean;
+        createdAt: string;
         updatedAt: string;
+        deletedAt: string;
         User: {
             firstName: string;
             lastName: string;
@@ -42,13 +44,17 @@ export default function PresentationItem({ data, onRenameClick, onDeleteClick: o
                     />
                 </CardTitle>
                 <CardDescription className="text-xs font-normal text-[#9AA0AB]">
-                    Last update: {formatDateToString(data.updatedAt)}
+                    {areDatesEqual(data?.createdAt, data?.updatedAt) ? (
+                        <>Created: {formatDateToString(data?.createdAt)}</>
+                    ) : (
+                        <>Last update: {formatDateToString(data?.updatedAt)}</>
+                    )}
                 </CardDescription>
             </CardHeader >
             <CardContent className="p-0">
                 <div className="w-full mb-5 relative">
                     <Image
-                        src={data.thumbnailImage || presentationPlaceholderImageUrl}
+                        src={getPresentationImageUrl(data.thumbnailImage)}
                         alt={data.name}
                         width={250}
                         height={141}

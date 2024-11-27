@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { getAppName } from "@/lib/app";
+import { ToastProvider } from "@/components/ui/toast";
+import { CustomToast } from "@/components/ui/custom-toast";
 
 /* const sailec = localFont({
   src: "./fonts/sailec.woff2",
@@ -50,6 +52,7 @@ export default function RootLayout({
           storageKey="presentation-app-theme"
         >
           {children}
+          <CustomToast />
         </ThemeProvider>
       </body>
     </html>
