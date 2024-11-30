@@ -1,6 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
 import { NextResponse } from "next/server";
+import { uploadFile } from "@/lib/upload";
 
 export async function POST(req: Request) {
     try {
@@ -19,20 +18,10 @@ export async function POST(req: Request) {
             );
         }
 
-        const uploadPath = path.join(process.cwd(), 'public/uploads', directory);
-        await fs.mkdir(uploadPath, { recursive: true });
+        const uploadFileResponse = await uploadFile(file, directory);
+        const { status, ...otherDatas } = uploadFileResponse;
 
-        const fileName = `${Date.now()}-${file.name}`;
-        const filePath = path.join(uploadPath, fileName);
-        await fs.writeFile(filePath, Buffer.from(await file.arrayBuffer()));
-
-        // const fileUrlPath = path.join('/', directory, fileName);
-
-        return NextResponse.json({
-            success: true,
-            message: 'File uploaded successfully.',
-            data: { fileName: fileName }
-        }, { status: 200 });
+        return NextResponse.json(otherDatas, { status });
     } catch (error: any) {
         console.error('Upload error:', error);
         return NextResponse.json(

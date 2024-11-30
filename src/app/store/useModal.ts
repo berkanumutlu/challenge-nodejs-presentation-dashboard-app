@@ -2,9 +2,9 @@ import { create } from "zustand";
 
 interface ModalState {
     modalName: string | null;
-    modalData: Record<string, any> | null;
+    modalData?: any;
     isModalOpen: boolean;
-    onModalOpen: (modalName: string, modalData?: Record<string, any>) => void;
+    onModalOpen: (modalName: string, modalData?: any) => void;
     onModalClose: () => void;
 }
 

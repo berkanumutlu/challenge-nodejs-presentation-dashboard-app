@@ -1,41 +1,47 @@
 "use client";
 
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createPresentationFormSchema, CreatePresentationFormValues } from "@/types/presentation";
 import { useModal } from "@/store/useModal";
+import { useCustomToast } from "@/hooks/use-custom-toast";
 import { presentationService } from "@/lib/presentation";
 import { Modal } from "@/components/ui/modal";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/ui/form-input";
 import { FormFileUpload } from "@/components/ui/form-file-upload";
-import { useCustomToast } from "@/components/ui/custom-toast";
 ;
 export function CreatePresentationModal() {
     const { isModalOpen, modalName, onModalClose } = useModal();
     const { showSuccessToast, showErrorToast } = useCustomToast();
 
     const isCreatePresentationModalOpen = isModalOpen && modalName === 'CreatePresentationModal';
-    const form = useForm<CreatePresentationFormValues>({
+    const modalForm = useForm<CreatePresentationFormValues>({
         resolver: zodResolver(createPresentationFormSchema),
         defaultValues: {
             name: '',
             thumbnailImage: null
         }
-    })
-    const isLoading = form.formState.isSubmitting;
+    });
+    const isModalLoading = modalForm.formState.isSubmitting;
 
-    const onSubmit = async (values: CreatePresentationFormValues) => {
+    useEffect(() => {
+        modalForm.reset();
+        return () => { }
+    }, [modalForm]);
+
+    const onSubmit = useCallback(async (values: CreatePresentationFormValues) => {
         try {
             const createRecord = await presentationService.create(values);
             if (createRecord?.success) {
                 showSuccessToast({
                     title: 'Presentation created',
                     description: 'Your presentation has been created successfully.'
-                })
-                form.reset();
+                });
+                modalForm.reset();
                 onModalClose();
-                window.dispatchEvent(new Event('presentationCreated'));
+                window.dispatchEvent(new Event('refreshPresentationList'));
             } else {
                 showErrorToast({
                     title: 'Creation failed',
@@ -49,30 +55,32 @@ export function CreatePresentationModal() {
                 description: 'An unexpected error occurred. Please try again.'
             });
         }
+    }, [modalForm, onModalClose, showErrorToast, showSuccessToast]);
+
+    if (!isCreatePresentationModalOpen) {
+        return null;
     }
 
     return (
         <Modal
             isOpen={isCreatePresentationModalOpen}
             onClose={onModalClose}
-            onSubmit={form.handleSubmit(onSubmit)}
-            isSubmitDisabled={!form.formState.isValid || isLoading}
-            isLoading={isLoading}
+            onSubmit={modalForm.handleSubmit(onSubmit)}
+            isSubmitDisabled={!modalForm.formState.isValid || isModalLoading}
+            isLoading={isModalLoading}
             title="Create Presentation"
             buttonText="Create"
         >
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <Form {...modalForm}>
+                <form onSubmit={modalForm.handleSubmit(onSubmit)} className="space-y-8">
                     <FormInput
-                        control={form.control}
-                        isDisabled={isLoading}
+                        control={modalForm.control}
                         name="name"
                         label="Presentation Name"
                         placeholder="Type your presentation name here."
                     />
                     <FormFileUpload
-                        control={form.control}
-                        isDisabled={isLoading}
+                        control={modalForm.control}
                         name="thumbnailImage"
                         label="Presentation Thumbnail"
                     />

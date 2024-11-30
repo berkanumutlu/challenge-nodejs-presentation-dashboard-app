@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import { RequestFilterType } from "@/types/request";
 import { CreatePresentationType, UpdatePresentationType } from "@/types/presentation";
-import { createRequestFilters } from "@/utils/request";
-import { uploadFile } from "@/utils/upload";
+import { createRequestFields, createRequestFilters } from "@/utils/request";
+import { uploadFileToAPI } from "@/utils/upload";
 import { isValidUrl } from "@/utils/text";
 import { fetchAPIWithAuth } from "./api";
 import { getPresentationPlaceholderImage, getPresentationUploadFilePath } from "./app";
@@ -23,6 +23,7 @@ export const presentationService = {
                 }
             }
             const requestData = createRequestFilters(filters);
+
             return await fetchPresentation('/list', { method: 'POST', data: requestData });
         } catch (error) {
             console.error('Presentation list error:', error);
@@ -37,6 +38,7 @@ export const presentationService = {
                 include: { User: true }
             };
             const requestData = createRequestFilters(filters);
+
             return await fetchPresentation('/get', { method: 'POST', data: requestData });
         } catch (error) {
             console.error('Presentation get error:', error);
@@ -46,8 +48,9 @@ export const presentationService = {
     create: async (data: CreatePresentationType) => {
         try {
             let thumbnailImageName = '';
+
             if (data?.thumbnailImage instanceof File) {
-                const uploadFileResponse = await uploadFile(data.thumbnailImage, 'presentations');
+                const uploadFileResponse = await uploadFileToAPI(data.thumbnailImage, 'presentations');
                 if (uploadFileResponse?.success && uploadFileResponse?.data?.fileName) {
                     thumbnailImageName = uploadFileResponse.data.fileName;
                 } else {
@@ -68,7 +71,23 @@ export const presentationService = {
     },
     update: async (id: string, data: UpdatePresentationType) => {
         try {
+            if (data?.thumbnailImage instanceof File) {
+                const uploadFileResponse = await uploadFileToAPI(data.thumbnailImage, 'presentations');
+                if (uploadFileResponse?.success && uploadFileResponse?.data?.fileName) {
+                    data.thumbnailImage = uploadFileResponse.data.fileName;
+                    // TODO: Delete previous image file
+                } else {
+                    throw new Error(uploadFileResponse.message || 'File upload failed.');
+                }
+            }
 
+            const filters = {
+                where: { id }
+            };
+            const requestFilters = createRequestFilters(filters);
+            const requetFields = createRequestFields(data);
+
+            return await fetchPresentation('/update', { method: 'PUT', data: { ...requestFilters, ...requetFields } });
         } catch (error) {
             console.error('Presentation update error:', error);
             throw error;

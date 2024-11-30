@@ -1,4 +1,5 @@
-export function formatDateToString(date: string | Date): string {
+export function formatDateToString(date: string | Date | null): string | null {
+    if (!date) return null;
     const now = new Date();
     const pastDate = new Date(date);
     const diffTime = Math.abs(now.getTime() - pastDate.getTime());
@@ -24,7 +25,8 @@ export function formatDateToString(date: string | Date): string {
     }
 }
 
-export function areDatesEqual(date1: Date | string, date2: Date | string): boolean {
+export function areDatesEqual(date1: Date | string | null, date2: Date | string | null): boolean {
+    if (!date1 || !date2) return false;
     const d1 = new Date(date1);
     const d2 = new Date(date2);
 

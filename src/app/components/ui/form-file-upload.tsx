@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Control, FieldValues, Path } from "react-hook-form";
-import { ImageDown } from 'lucide-react';
+import { ImageDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,20 +10,20 @@ interface FileUploadProps<T extends FieldValues> {
     control: Control<T>;
     id?: string;
     name: Path<T>;
+    value?: File | string,
     label?: string;
     accept?: string;
     className?: string;
-    isDisabled?: boolean;
 }
 
 export function FormFileUpload<T extends FieldValues>({
     control,
     id,
     name,
+    value,
     label,
     accept = 'image/*',
     className,
-    isDisabled,
 }: FileUploadProps<T>) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,7 +41,7 @@ export function FormFileUpload<T extends FieldValues>({
         <FormField
             name={name}
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState, formState }) => (
                 <FormItem>
                     <FormLabel htmlFor={id} className="text-xs font-semibold text-tertiary">
                         {label}
@@ -75,8 +75,8 @@ export function FormFileUpload<T extends FieldValues>({
                         type="file"
                         ref={fileInputRef}
                         accept={accept}
+                        disabled={formState.isSubmitting}
                         onChange={(e) => handleInputOnChange(e, field)}
-                        disabled={isDisabled}
                         className="hidden"
                     />
                     <FormMessage />

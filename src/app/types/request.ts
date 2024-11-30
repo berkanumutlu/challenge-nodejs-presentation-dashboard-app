@@ -6,3 +6,10 @@ export type RequestFilterType = {
     offset?: number,
     orderBy?: Record<string, 'ASC' | 'asc' | 'DESC' | 'desc'>
 };
+
+export type RequestFieldsType = {
+    fields?: Record<string, any> | null
+};
+export type RequestFieldsDataType = {
+    [key: string]: any;
+};

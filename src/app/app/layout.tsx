@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { getAppName } from "@/lib/app";
-import { ToastProvider } from "@/components/ui/toast";
 import { CustomToast } from "@/components/ui/custom-toast";
 
 /* const sailec = localFont({
@@ -24,7 +23,8 @@ const sailec = localFont({
     // { path: "./fonts/sailec/Sailec-ExtraBold.woff2", weight: "800", style: "normal" },
     { path: "./fonts/sailec/sailec-black.ttf", weight: "900", style: "normal" },
   ],
-  variable: "--font-sailec"
+  variable: "--font-sailec",
+  display: 'swap'
 });
 
 export const metadata: Metadata = {

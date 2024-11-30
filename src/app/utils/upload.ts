@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function uploadFile(file: File, directory: string) {
+export async function uploadFileToAPI(file: File, directory: string) {
     try {
         const formData = new FormData();
         formData.append('file', file);
@@ -14,11 +14,11 @@ export async function uploadFile(file: File, directory: string) {
 
         return response.data;
     } catch (error: any) {
-        console.error('File upload error:', error);
+        console.error('uploadFileToAPI error:', error);
         return {
             success: false,
-            status: error.response?.status || 500,
-            message: error.message || 'File upload failed.',
+            status: error?.response?.status || 500,
+            message: error?.message || 'File upload failed.',
             data: {}
         };
     }
