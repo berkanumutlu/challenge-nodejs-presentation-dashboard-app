@@ -18,26 +18,33 @@ export function PresentationItemMenu({ isOpen, setIsOpen, data }: PresentationIt
         setIsOpen(false);
     }, [data, onModalOpen, setIsOpen]);
 
+    const onClickDelete = useCallback(() => {
+        onModalOpen('DeletePresentationModal', { presentation: data });
+        setIsOpen(false);
+    }, [data, onModalOpen, setIsOpen]);
+
     return (
-        <div
-            className={cn(
-                "absolute top-4 right-4",
-                isOpen && "z-10"
-            )}
-        >
-            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-                <DropdownMenuTrigger></DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={onClickEdit}>
-                        <ClipboardPen className="mr-2 w-4 h-4" />
-                        <span className="text-xs">Edit</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-600">
-                        <Trash2 className="mr-2 w-4 h-4" />
-                        <span className="text-xs">Delete</span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-    )
+        <>
+            <div
+                className={cn(
+                    "absolute top-4 right-4",
+                    isOpen && "z-10"
+                )}
+            >
+                <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+                    <DropdownMenuTrigger></DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={onClickEdit}>
+                            <ClipboardPen className="mr-2 w-4 h-4" />
+                            <span className="text-xs">Edit</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={onClickDelete} className="text-red-600">
+                            <Trash2 className="mr-2 w-4 h-4" />
+                            <span className="text-xs">Delete</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+        </>
+    );
 }

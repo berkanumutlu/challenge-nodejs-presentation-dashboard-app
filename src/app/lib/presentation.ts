@@ -71,21 +71,24 @@ export const presentationService = {
     },
     update: async (id: string, data: UpdatePresentationType) => {
         try {
+            const requestData = { ...data };
+
             if (data?.thumbnailImage instanceof File) {
                 const uploadFileResponse = await uploadFileToAPI(data.thumbnailImage, 'presentations');
                 if (uploadFileResponse?.success && uploadFileResponse?.data?.fileName) {
-                    data.thumbnailImage = uploadFileResponse.data.fileName;
-                    // TODO: Delete previous image file
+                    requestData.thumbnailImage = uploadFileResponse.data.fileName;
                 } else {
                     throw new Error(uploadFileResponse.message || 'File upload failed.');
                 }
+            } else {
+                delete requestData.thumbnailImage;
             }
 
             const filters = {
                 where: { id }
             };
             const requestFilters = createRequestFilters(filters);
-            const requetFields = createRequestFields(data);
+            const requetFields = createRequestFields(requestData);
 
             return await fetchPresentation('/update', { method: 'PUT', data: { ...requestFilters, ...requetFields } });
         } catch (error) {
@@ -95,7 +98,12 @@ export const presentationService = {
     },
     delete: async (id: string) => {
         try {
+            const filters = {
+                where: { id }
+            };
+            const requestFilters = createRequestFilters(filters);
 
+            return await fetchPresentation('/delete', { method: 'DELETE', data: { ...requestFilters } });
         } catch (error) {
             console.error('Presentation delete error:', error);
             throw error;

@@ -9,6 +9,7 @@ import PresentationItem from "@/components/presentation/presentation-item";
 import { createPresentationItemsSkeleton } from "@/components/ui/skeletons/presentation";
 
 const EditPresentationModal = dynamic(() => import('@/components/modals/presentation/edit-modal').then(mod => mod.EditPresentationModal), { ssr: false });
+const DeletePresentationModal = dynamic(() => import('@/components/modals/presentation/delete-modal').then(mod => mod.DeletePresentationModal), { ssr: false });
 
 export default function PresentationList() {
     const { isModalOpen, modalName } = useModal();
@@ -52,9 +53,8 @@ export default function PresentationList() {
             <div className="flex flex-wrap gap-5 xl:gap-x-3">
                 {presentations ? memoizedPresentationItems : createPresentationItemsSkeleton(24)}
             </div>
-            <>
-                {isModalOpen && modalName === 'EditPresentationModal' && <EditPresentationModal />}
-            </>
+            {isModalOpen && modalName === 'EditPresentationModal' && <EditPresentationModal />}
+            {isModalOpen && modalName === 'DeletePresentationModal' && <DeletePresentationModal />}
         </>
     );
 }

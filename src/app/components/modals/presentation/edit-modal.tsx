@@ -106,8 +106,8 @@ export function EditPresentationModal() {
                     />
                     {modalData?.presentation?.thumbnailImage && (
                         <div className="mt-4">
-                            <p className="text-sm font-medium mb-2">Current Thumbnail:</p>
-                            <a href={getPresentationImageUrl(modalData.presentation.thumbnailImage)} target="_blank" rel="noopener noreferrer">
+                            <p className="text-sm font-medium mb-2">Current:</p>
+                            <a href={getPresentationImageUrl(modalData.presentation.thumbnailImage)} target="_blank" rel="noopener noreferrer" className="inline-block">
                                 <Image
                                     src={getPresentationImageUrl(modalData.presentation.thumbnailImage)}
                                     alt={modalData.presentation.name || 'Current Thumbnail Image'}
