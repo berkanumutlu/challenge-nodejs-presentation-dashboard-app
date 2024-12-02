@@ -7,49 +7,49 @@ import { presentationService } from "@/lib/presentation";
 import { createCustomEvent, PRESENTATION_UPDATED } from "@/utils/events";
 import { AlertModal } from "@/components/ui/alert-modal";
 
-export function DeletePresentationModal() {
+export function RestorePresentationModal() {
     const { isModalOpen, modalData, modalName, onModalClose } = useModal();
     const { showSuccessToast, showErrorToast } = useCustomToast();
     const initializedRef = useRef(false);
 
-    const isDeletePresentationModalOpen = isModalOpen && modalName === 'DeletePresentationModal';
+    const isRestorePresentationModalOpen = isModalOpen && modalName === 'RestorePresentationModal';
 
     const initializeForm = useCallback(() => {
-        if (isDeletePresentationModalOpen && !modalData?.presentation && !initializedRef.current) {
+        if (isRestorePresentationModalOpen && !modalData?.presentation && !initializedRef.current) {
             showErrorToast({
                 title: 'Not Found',
                 description: 'Presentation not found.'
             });
             onModalClose();
         }
-    }, [modalData, isDeletePresentationModalOpen, showErrorToast, onModalClose]);
+    }, [modalData, isRestorePresentationModalOpen, showErrorToast, onModalClose]);
 
     useEffect(() => {
-        if (isDeletePresentationModalOpen) {
+        if (isRestorePresentationModalOpen) {
             initializeForm();
         } else {
             initializedRef.current = false;
         }
-    }, [isDeletePresentationModalOpen, initializeForm]);
+    }, [isRestorePresentationModalOpen, initializeForm]);
 
     const onConfirm = useCallback(async () => {
         try {
-            const response = await presentationService.delete(modalData.presentation.id);
-            if (response?.success) {
+            const response = await presentationService.restore(modalData.presentation.id);
+            if (response.success) {
                 showSuccessToast({
-                    title: 'Presentation deleted',
-                    description: 'Your presentation has been deleted successfully.'
+                    title: 'Presentation restored',
+                    description: 'Your presentation has been restored successfully.'
                 });
                 onModalClose();
                 window.dispatchEvent(createCustomEvent(PRESENTATION_UPDATED, response.data));
             } else {
                 showErrorToast({
-                    title: 'Delete failed',
-                    description: 'Failed to delete the presentation. Please try again.'
+                    title: 'Restore failed',
+                    description: 'Failed to restore the presentation. Please try again.'
                 });
             }
         } catch (error) {
-            console.error('Delete presentation error:', error);
+            console.error('Restore presentation error:', error);
             showErrorToast({
                 title: 'Error',
                 description: 'An unexpected error occurred. Please try again.'
@@ -57,18 +57,18 @@ export function DeletePresentationModal() {
         }
     }, [modalData, showSuccessToast, showErrorToast, onModalClose]);
 
-    if (!isDeletePresentationModalOpen) {
+    if (!isRestorePresentationModalOpen) {
         return null;
     }
 
     return (
         <AlertModal
-            isOpen={isDeletePresentationModalOpen}
+            isOpen={isRestorePresentationModalOpen}
             onClose={onModalClose}
             onConfirm={onConfirm}
-            title="Delete Confirmation"
-            description="Are you sure you want to delete this presentation? This action can be undone later."
-            confirmClassName="bg-red-500 hover:bg-red-600"
+            title="Restore Confirmation"
+            description="Are you sure you want to restore this presentation?"
+            confirmClassName="bg-sky-500 hover:bg-sky-600"
         />
     );
 }

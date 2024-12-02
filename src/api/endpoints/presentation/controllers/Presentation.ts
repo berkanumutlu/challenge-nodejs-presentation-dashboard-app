@@ -1,5 +1,5 @@
 import { Request, Response, Next } from "@/types/request";
-import { PresentationModelConfig, UserModelConfig } from "@/types/models";
+import { PresentationModelConfig, UserModelConfig } from "@/types/model";
 import { createPaginatedResponseData } from "@/middlewares/responseHandler";
 import { prepareRequestFilters } from "@/utils/request";
 import { isAdminUser } from "@/utils/auth";
@@ -99,8 +99,11 @@ export async function update(req: Request, res: Response, next: Next) {
         if (!record) return res.warning('Presentation not found.', 404);
 
         const updatedRecord = await PresentationService.update(requestFilter.where, requestFields);
-        if (updatedRecord[0] === 0) return res.warning('The presentation has not been updated.', 200);
-        const responseData = await filterHiddenFields(requestFields, req, PresentationModelConfig);
+
+        if (record?.User) {
+            updatedRecord.User = await filterHiddenFields(record.User, req, UserModelConfig);
+        }
+        const responseData = await filterHiddenFields(updatedRecord, req, PresentationModelConfig);
 
         return res.success(responseData, 'The Presentation has been updated successfully.');
     } catch (err) {
@@ -119,12 +122,17 @@ export async function deleteRecord(req: Request, res: Response, next: Next) {
             requestFilter.where = { userId: req.user.id, ...requestFilter?.where };
         }
 
-        const record = await PresentationService.getActive(requestFilter);
+        const record = await PresentationService.get(requestFilter);
         if (!record) return res.warning('Presentation not found.', 404);
 
-        await PresentationService.softDeleteRecord(record);
+        const deletedRecord = await PresentationService.softDeleteRecord(record);
 
-        return res.success(null, 'The Presentation has been deleted successfully.');
+        if (record?.User) {
+            deletedRecord.User = await filterHiddenFields(record.User, req, UserModelConfig);
+        }
+        const responseData = await filterHiddenFields(deletedRecord, req, PresentationModelConfig);
+
+        return res.success(responseData, 'The Presentation has been deleted successfully.');
     } catch (err) {
         next(err);
     }
@@ -138,16 +146,21 @@ export async function restore(req: Request, res: Response, next: Next) {
         const requestFilter = await prepareRequestFilters(filters);
         requestFilter.where = {
             ...requestFilter.where,
-            deletedAt: { not: null },
+            deletedAt: { not: null }
         };
         if (!isAdminUser(req)) {
             if (!Object.hasOwn(requestFilter?.where, 'id')) return res.warning('Please provide id.', 400);
             requestFilter.where = { userId: req.user.id, ...requestFilter?.where };
         }
 
-        const record = await PresentationService.getActive(requestFilter);
+        const record = await PresentationService.get(requestFilter);
         if (!record) return res.warning('Presentation not found.', 404);
+
         const restoredRecord = await PresentationService.restore(record);
+
+        if (record?.User) {
+            restoredRecord.User = await filterHiddenFields(record.User, req, UserModelConfig);
+        }
         const responseData = await filterHiddenFields(restoredRecord, req, PresentationModelConfig);
 
         return res.success(responseData, 'The Presentation has been restored successfully.');

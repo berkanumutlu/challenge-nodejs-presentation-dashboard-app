@@ -85,7 +85,8 @@ export const presentationService = {
             }
 
             const filters = {
-                where: { id }
+                where: { id },
+                include: { User: true }
             };
             const requestFilters = createRequestFilters(filters);
             const requetFields = createRequestFields(requestData);
@@ -99,7 +100,8 @@ export const presentationService = {
     delete: async (id: string) => {
         try {
             const filters = {
-                where: { id }
+                where: { id },
+                include: { User: true }
             };
             const requestFilters = createRequestFilters(filters);
 
@@ -111,7 +113,13 @@ export const presentationService = {
     },
     restore: async (id: string) => {
         try {
+            const filters = {
+                where: { id },
+                include: { User: true }
+            };
+            const requestFilters = createRequestFilters(filters);
 
+            return await fetchPresentation('/restore', { method: 'PATCH', data: { ...requestFilters } });
         } catch (error) {
             console.error('Presentation restore error:', error);
             throw error;

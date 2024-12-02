@@ -8,6 +8,7 @@ import { editPresentationFormSchema, EditPresentationFormValues } from "@/types/
 import { useModal } from "@/store/useModal";
 import { useCustomToast } from "@/hooks/use-custom-toast";
 import { getPresentationImageUrl, presentationService } from "@/lib/presentation";
+import { createCustomEvent, PRESENTATION_UPDATED } from "@/utils/events";
 import { Modal } from "@/components/ui/modal";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/ui/form-input";
@@ -54,14 +55,14 @@ export function EditPresentationModal() {
 
     const onSubmit = useCallback(async (values: EditPresentationFormValues) => {
         try {
-            const updateRecord = await presentationService.update(modalData?.presentation?.id, values);
-            if (updateRecord?.success) {
+            const response = await presentationService.update(modalData?.presentation?.id, values);
+            if (response?.success) {
                 showSuccessToast({
                     title: 'Presentation updated',
                     description: 'Your presentation has been updated successfully.'
                 });
                 onModalClose();
-                window.dispatchEvent(new Event('refreshPresentationList'));
+                window.dispatchEvent(createCustomEvent(PRESENTATION_UPDATED, response.data));
             } else {
                 showErrorToast({
                     title: 'Update failed',

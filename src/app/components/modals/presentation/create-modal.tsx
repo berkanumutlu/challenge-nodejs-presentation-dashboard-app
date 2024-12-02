@@ -7,6 +7,7 @@ import { createPresentationFormSchema, CreatePresentationFormValues } from "@/ty
 import { useModal } from "@/store/useModal";
 import { useCustomToast } from "@/hooks/use-custom-toast";
 import { presentationService } from "@/lib/presentation";
+import { createCustomEvent, PRESENTATION_CREATED } from "@/utils/events";
 import { Modal } from "@/components/ui/modal";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/ui/form-input";
@@ -33,15 +34,15 @@ export function CreatePresentationModal() {
 
     const onSubmit = useCallback(async (values: CreatePresentationFormValues) => {
         try {
-            const createRecord = await presentationService.create(values);
-            if (createRecord?.success) {
+            const response = await presentationService.create(values);
+            if (response?.success) {
                 showSuccessToast({
                     title: 'Presentation created',
                     description: 'Your presentation has been created successfully.'
                 });
                 modalForm.reset();
                 onModalClose();
-                window.dispatchEvent(new Event('refreshPresentationList'));
+                window.dispatchEvent(createCustomEvent(PRESENTATION_CREATED, response.data));
             } else {
                 showErrorToast({
                     title: 'Creation failed',

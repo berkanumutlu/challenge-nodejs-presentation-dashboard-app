@@ -7,9 +7,11 @@ import { useModal } from "@/store/useModal";
 import { presentationService } from "@/lib/presentation";
 import PresentationItem from "@/components/presentation/presentation-item";
 import { createPresentationItemsSkeleton } from "@/components/ui/skeletons/presentation";
+import { PRESENTATION_CREATED } from "@/utils/events";
 
 const EditPresentationModal = dynamic(() => import('@/components/modals/presentation/edit-modal').then(mod => mod.EditPresentationModal), { ssr: false });
 const DeletePresentationModal = dynamic(() => import('@/components/modals/presentation/delete-modal').then(mod => mod.DeletePresentationModal), { ssr: false });
+const RestorePresentationModal = dynamic(() => import('@/components/modals/presentation/restore-modal').then(mod => mod.RestorePresentationModal), { ssr: false });
 
 export default function PresentationList() {
     const { isModalOpen, modalName } = useModal();
@@ -27,9 +29,9 @@ export default function PresentationList() {
     useEffect(() => {
         fetchPresentationsData();
 
-        window.addEventListener('refreshPresentationList', fetchPresentationsData);
+        window.addEventListener(PRESENTATION_CREATED, fetchPresentationsData as EventListener);
         return () => {
-            window.removeEventListener('refreshPresentationList', fetchPresentationsData);
+            window.removeEventListener(PRESENTATION_CREATED, fetchPresentationsData as EventListener);
         };
     }, [fetchPresentationsData]);
 
@@ -50,11 +52,12 @@ export default function PresentationList() {
                     {presentations?.meta?.total || 0}{' '}{presentations?.meta?.total > 1 ? 'files' : 'file'}
                 </h4>
             </div>
-            <div className="flex flex-wrap gap-5 xl:gap-x-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-5 xl:gap-x-2">
                 {presentations ? memoizedPresentationItems : createPresentationItemsSkeleton(24)}
             </div>
             {isModalOpen && modalName === 'EditPresentationModal' && <EditPresentationModal />}
             {isModalOpen && modalName === 'DeletePresentationModal' && <DeletePresentationModal />}
+            {isModalOpen && modalName === 'RestorePresentationModal' && <RestorePresentationModal />}
         </>
     );
 }

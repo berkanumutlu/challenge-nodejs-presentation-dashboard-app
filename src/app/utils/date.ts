@@ -1,4 +1,69 @@
-export function formatDateToString(date: string | Date | null): string | null {
+import { FormatDateOptions } from "@/types/text";
+
+export function formatDate({
+    date,
+    format,
+    customFormat,
+    locale = "en-US"
+}: FormatDateOptions): string {
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime())) {
+        throw new Error("Invalid date provided.");
+    }
+
+    const options: Intl.DateTimeFormatOptions = {};
+    switch (format) {
+        case "shortDate":
+            options.year = "numeric";
+            options.month = "2-digit";
+            options.day = "2-digit";
+            break;
+        case "longDate":
+            options.year = "numeric";
+            options.month = "long";
+            options.day = "numeric";
+            break;
+        case "shortDateTime":
+            options.year = "numeric";
+            options.month = "2-digit";
+            options.day = "2-digit";
+            options.hour = "2-digit";
+            options.minute = "2-digit";
+            break;
+        case "longDateTime":
+            options.year = "numeric";
+            options.month = "long";
+            options.day = "numeric";
+            options.hour = "2-digit";
+            options.minute = "2-digit";
+            break;
+        case "time":
+            options.hour = "2-digit";
+            options.minute = "2-digit";
+            break;
+        case "isoDate":
+            return parsedDate.toISOString().split("T")[0];
+        case "isoDateTime":
+            return parsedDate.toISOString();
+        case "custom":
+            if (!customFormat) {
+                throw new Error("Custom format requires a 'customFormat' string.");
+            }
+            return customFormat
+                .replace("YYYY", parsedDate.getFullYear().toString())
+                .replace("MM", String(parsedDate.getMonth() + 1).padStart(2, "0"))
+                .replace("DD", String(parsedDate.getDate()).padStart(2, "0"))
+                .replace("HH", String(parsedDate.getHours()).padStart(2, "0"))
+                .replace("mm", String(parsedDate.getMinutes()).padStart(2, "0"))
+                .replace("ss", String(parsedDate.getSeconds()).padStart(2, "0"));
+        default:
+            throw new Error("Invalid format type provided.");
+    }
+
+    return new Intl.DateTimeFormat(locale, options).format(parsedDate);
+}
+
+export function formatDateToAgoString(date: string | Date | null): string | null {
     if (!date) return null;
     const now = new Date();
     const pastDate = new Date(date);
