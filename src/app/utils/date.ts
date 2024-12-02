@@ -1,4 +1,5 @@
-export function formatDateTime(date: string | Date): string {
+export function formatDateToString(date: string | Date | null): string | null {
+    if (!date) return null;
     const now = new Date();
     const pastDate = new Date(date);
     const diffTime = Math.abs(now.getTime() - pastDate.getTime());
@@ -22,4 +23,23 @@ export function formatDateTime(date: string | Date): string {
         const years = Math.floor(diffDays / 365);
         return `${years} year${years > 1 ? 's' : ''} ago`;
     }
+}
+
+export function areDatesEqual(date1: Date | string | null, date2: Date | string | null): boolean {
+    if (!date1 || !date2) return false;
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+        throw new Error('Invalid date format');
+    }
+
+    return (
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate() &&
+        d1.getHours() === d2.getHours() &&
+        d1.getMinutes() === d2.getMinutes() &&
+        d1.getSeconds() === d2.getSeconds()
+    );
 }

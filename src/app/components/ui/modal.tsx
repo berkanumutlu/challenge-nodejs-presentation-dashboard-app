@@ -1,4 +1,3 @@
-import React from "react";
 import { Ellipsis } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -7,26 +6,26 @@ import { Button } from "@/components/ui/button";
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
+    isLoading?: boolean;
     title: string;
     description?: string;
     children: React.ReactNode;
     footerContent?: React.ReactNode;
-    isLoading?: boolean;
+    buttonText?: string;
     onSubmit?: () => void;
-    submitText?: string;
     isSubmitDisabled?: boolean;
 }
 
 export function Modal({
     isOpen,
     onClose,
+    isLoading = false,
     title,
     description,
     children,
     footerContent,
-    isLoading = false,
+    buttonText = "Submit",
     onSubmit,
-    submitText = "Submit",
     isSubmitDisabled = false,
 }: ModalProps) {
     return (
@@ -36,9 +35,7 @@ export function Modal({
                     <DialogTitle>{title}</DialogTitle>
                     {description && <DialogDescription>{description}</DialogDescription>}
                 </DialogHeader>
-                <div className="space-y-6 py-6">
-                    {children}
-                </div>
+                <div className="space-y-6 py-6">{children}</div>
                 <DialogFooter>
                     {footerContent || (
                         <Button
@@ -47,16 +44,15 @@ export function Modal({
                             disabled={isLoading}
                             className={cn(
                                 "text-white",
-                                !isSubmitDisabled ? "bg-primary hover:bg-secondary" : "bg-[#CCCCCC] hover:bg-[#a4a4a4]"
+                                !isSubmitDisabled || isLoading ? "bg-primary hover:bg-secondary" : "bg-[#CCCCCC] hover:bg-[#a4a4a4]"
                             )}
                         >
                             {isLoading ? (
                                 <Ellipsis className="!w-10 !h-10 animate-pulse" />
                             ) : (
-                                submitText
+                                buttonText
                             )}
-                        </Button>
-                    )}
+                        </Button>)}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

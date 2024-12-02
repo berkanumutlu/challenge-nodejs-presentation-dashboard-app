@@ -25,18 +25,23 @@ export async function fetchAPI(endpoint: string, options: AxiosRequestConfig = {
                 throw new Error(`API error: ${error.status} - ${error?.response?.data}`);
             }
         } else {
-            console.error('Fetch error:', error);
+            console.error('fetchAPI error:', error);
         }
         throw error;
     }
 }
 export async function fetchAPIWithAuth(endpoint: string, options: AxiosRequestConfig = {}) {
-    const session = await getSession();
-    return await fetchAPI(endpoint, {
-        ...options,
-        headers: {
-            ...options.headers,
-            Authorization: `Bearer ${session?.accessToken}`
-        }
-    });
+    try {
+        const session = await getSession();
+        return await fetchAPI(endpoint, {
+            ...options,
+            headers: {
+                ...options.headers,
+                Authorization: `Bearer ${session?.accessToken}`
+            }
+        });
+    } catch (error) {
+        console.error('fetchAPIWithAuth error:', error);
+        throw error;
+    }
 }

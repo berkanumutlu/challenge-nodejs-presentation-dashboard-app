@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { UserLoginType, UserRegisterType } from "@/types/auth";
 import { fetchAPI, fetchAPIWithAuth } from "./api";
 
 export const authOptions: NextAuthOptions = {
@@ -8,8 +9,8 @@ export const authOptions: NextAuthOptions = {
         Credentials({
             name: 'Credentials',
             credentials: {
-                username: { label: "Username", type: "text" },
-                password: { label: "Password", type: "password" }
+                username: { label: 'Username', type: 'text' },
+                password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
                 if (!credentials?.username || !credentials?.password) {
@@ -17,16 +18,16 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
                 try {
-                    const response = await auth.login({
+                    const response = await authService.login({
                         username: credentials?.username as string,
                         password: credentials?.password as string
                     });
-                    if (response?.status && response?.data?.token) {
-                        const user = await auth.getUser();
-                        if (user?.status && user?.data) {
+                    if (response?.success && response?.data?.token) {
+                        const user = await authService.getUser();
+                        if (user?.success && user?.data) {
                             return { user: user.data, token: response.data.token };
                         }
-                        return { token: response.data.token };
+                        return null;
                     }
                     return null;
                 } catch (error) {
@@ -41,7 +42,7 @@ export const authOptions: NextAuthOptions = {
     },
     secret: process.env.NEXTAUTH_SECRET,
     session: {
-        strategy: "jwt"
+        strategy: 'jwt'
     },
     callbacks: {
         async jwt({ token, user }) {
@@ -75,23 +76,26 @@ const routePrefix = '/auth';
 export async function fetchAuth(endpoint: string, options: AxiosRequestConfig = {}) {
     return fetchAPI(`${routePrefix}${endpoint}`, options);
 }
-const mockUserId = 'aed3186d-a7c3-436e-a1f5-aa353f62b9e8'; // TODO: For API connection issue
-export const auth = {
-    login: async (credentials: LoginType) => {
+// TODO: For API connection issue
+const mockUserId = 'aed3186d-a7c3-436e-a1f5-aa353f62b9e8';
+const mockUserToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFlZDMxODZkLWE3YzMtNDM2ZS1hMWY1LWFhMzUzZjYyYjllOCIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzMyNjEzMjIzLCJleHAiOjQ4ODgzNzMyMjN9.BNRZCbEo08730FMY-AusdVF9K75SnSTX7bYBbgWbBd0';
+export const authService = {
+    login: async (credentials: UserLoginType) => {
         try {
             // return await fetchAuth('/login', { method: 'POST', data: credentials });
-            return { status: true, data: { token: mockUserId } }; // TODO: For API connection issue
+            // TODO: For API connection issue
+            return { success: true, status: 200, data: { token: mockUserToken } };
         } catch (error) {
-            console.error('Login error in auth.ts:', error);
+            console.error('Login error:', error);
             throw error;
         }
     },
     logout: () => fetchAuth('/logout', { method: 'POST' }),
-    register: async (userData: RegisterType) => {
+    register: async (userData: UserRegisterType) => {
         try {
             return await fetchAuth('/register', { method: 'POST', data: userData });
         } catch (error) {
-            console.error('Register error in auth.ts:', error);
+            console.error('Register error:', error);
             throw error;
         }
     },
@@ -101,21 +105,10 @@ export const auth = {
             // TODO: For API connection issue
             const getMockUser = await axios.get('https://jsonplaceholder.typicode.com/users/1');
             getMockUser.data.id = mockUserId;
-            return getMockUser;
+            return { success: true, status: 200, data: getMockUser?.data };
         } catch (error) {
-            console.error('getUser error in auth.ts:', error);
+            console.error('getUser error:', error);
             throw error;
         }
     }
 };
-
-type LoginType = {
-    username: string;
-    password: string;
-}
-type RegisterType = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-}
