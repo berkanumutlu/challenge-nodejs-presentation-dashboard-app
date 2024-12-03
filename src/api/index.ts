@@ -18,8 +18,8 @@ const port = appConfig.port;
 server.use(cors({
     origin: appConfig.corsOrigin,
     credentials: true
-})); // Allows browsers to accept requests from different sources (origin). (Allows us to send requests to the API address.)
-server.use(express.json());             // If there is data in JSON format in the body of the incoming request, it automatically parses this data and places it in the req.body object.
+}));                                                        // Allows browsers to accept requests from different sources (origin). (Allows us to send requests to the API address.)
+server.use(express.json());                                 // If there is data in JSON format in the body of the incoming request, it automatically parses this data and places it in the req.body object.
 server.use(responseHandler as express.RequestHandler);
 
 // Route definitions

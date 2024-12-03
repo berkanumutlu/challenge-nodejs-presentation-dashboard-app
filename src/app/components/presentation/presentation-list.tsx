@@ -23,6 +23,7 @@ export default function PresentationList() {
             setPresentations(response.data);
         } catch (error) {
             console.error('Error fetching presentations:', error);
+            setPresentations([]);
         }
     }, []);
 

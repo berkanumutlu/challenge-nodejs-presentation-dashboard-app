@@ -27,7 +27,7 @@ export const createPaginatedResponseData = (
     limit = limit ?? 0;
     offset = offset ?? 0;
     let currentPage: number = 1, lastPage: number = 1;
-    if (limit !== 0) {
+    if (limit && limit !== 0) {
         currentPage = Math.floor(offset / limit) + 1;
         lastPage = Math.ceil(total / limit);
     }
@@ -51,9 +51,9 @@ const responseHandler = (req: Request, res: Response, next: Next): void => {
     res.error = (err: any, message: string = 'Error', status: number = 500): void => {
         let errors = err;
         // If in a production environment, more meaningful messages are displayed.
-        if (appConfig.env === 'production') {
+        if (appConfig?.env === 'production') {
             let errorMessages: { message: string }[] = [];
-            if (err.errors) {
+            if (err?.errors) {
                 err.errors.forEach((error: { message: string }) => errorMessages.push({ message: error.message }));
             } else {
                 errorMessages.push({ message: err.message });
