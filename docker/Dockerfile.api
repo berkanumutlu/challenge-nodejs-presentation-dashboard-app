@@ -14,7 +14,7 @@ COPY src/api ./
 RUN npm install
 
 # Expose the port the app runs on
-EXPOSE 3001
+EXPOSE 5000
 # Prisma Studio runs on port 5555 by default
 EXPOSE 5555
 

@@ -1,67 +1,92 @@
 "use client";
 
-import React, { useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createPresentationFormSchema, CreatePresentationFormValues } from "@/types/presentation";
+import { useModal } from "@/store/useModal";
+import { useCustomToast } from "@/hooks/use-custom-toast";
+import { presentationService } from "@/lib/presentation";
+import { createCustomEvent, PRESENTATION_CREATED } from "@/utils/events";
 import { Modal } from "@/components/ui/modal";
+import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/ui/form-input";
-import { FileUpload } from "@/components/ui/file-upload";
+import { FormFileUpload } from "@/components/ui/form-file-upload";
+;
+export function CreatePresentationModal() {
+    const { isModalOpen, modalName, onModalClose } = useModal();
+    const { showSuccessToast, showErrorToast } = useCustomToast();
 
-interface CreatePresentationModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onCreate: (name: string, image: File | null) => void;
-}
-
-export function CreatePresentationModal({ isOpen, onClose, onCreate }: CreatePresentationModalProps) {
-    const [name, setName] = useState("");
-    const [image, setImage] = useState<File | null>(null);
-    const [isError, setIsError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleCreate = () => {
-        if (name.trim() === "" || !image) {
-            setIsError(true);
-            return;
+    const isCreatePresentationModalOpen = isModalOpen && modalName === 'CreatePresentationModal';
+    const modalForm = useForm<CreatePresentationFormValues>({
+        resolver: zodResolver(createPresentationFormSchema),
+        defaultValues: {
+            name: '',
+            thumbnailImage: null
         }
-        setIsLoading(true);
-        onCreate(name.trim(), image);
-        setTimeout(() => {
-            setName("");
-            setImage(null);
-            setIsError(false);
-            setIsLoading(false);
-            onClose();
-        }, 3000); // Simulating API call
-    };
+    });
+    const isModalLoading = modalForm.formState.isSubmitting;
 
-    const isFormValid = name.trim() !== "" && image !== null;
+    useEffect(() => {
+        modalForm.reset();
+        return () => { }
+    }, [modalForm]);
+
+    const onSubmit = useCallback(async (values: CreatePresentationFormValues) => {
+        try {
+            const response = await presentationService.create(values);
+            if (response?.success) {
+                showSuccessToast({
+                    title: 'Presentation created',
+                    description: 'Your presentation has been created successfully.'
+                });
+                modalForm.reset();
+                onModalClose();
+                window.dispatchEvent(createCustomEvent(PRESENTATION_CREATED, response.data));
+            } else {
+                showErrorToast({
+                    title: 'Creation failed',
+                    description: 'Failed to create the presentation. Please try again.'
+                });
+            }
+        } catch (error) {
+            console.error('Create presentation modal onSubmit error:', error);
+            showErrorToast({
+                title: 'Error',
+                description: 'An unexpected error occurred. Please try again.'
+            });
+        }
+    }, [modalForm, onModalClose, showErrorToast, showSuccessToast]);
+
+    if (!isCreatePresentationModalOpen) {
+        return null;
+    }
 
     return (
         <Modal
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={isCreatePresentationModalOpen}
+            onClose={onModalClose}
+            onSubmit={modalForm.handleSubmit(onSubmit)}
+            isSubmitDisabled={!modalForm.formState.isValid || isModalLoading}
+            isLoading={isModalLoading}
             title="Create Presentation"
-            onSubmit={handleCreate}
-            submitText="Create"
-            isLoading={isLoading}
-            isSubmitDisabled={!isFormValid}
+            buttonText="Create"
         >
-            <FormInput
-                id="name"
-                label="Presentation Name"
-                value={name}
-                isDisabled={isLoading}
-                onChange={setName}
-                placeholder="Type your presentation name here."
-                error={isError && name.trim() === "" ? "Please enter a valid name." : ""}
-            />
-            <FileUpload
-                id="image"
-                label="Presentation Thumbnail"
-                isDisabled={isLoading}
-                onChange={setImage}
-                file={image}
-                error={isError && !image ? "Please select an image." : ""}
-            />
+            <Form {...modalForm}>
+                <form onSubmit={modalForm.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormInput
+                        control={modalForm.control}
+                        name="name"
+                        label="Presentation Name"
+                        placeholder="Type your presentation name here."
+                    />
+                    <FormFileUpload
+                        control={modalForm.control}
+                        name="thumbnailImage"
+                        label="Presentation Thumbnail"
+                    />
+                </form>
+            </Form>
         </Modal>
-    );
+    )
 }

@@ -1,6 +1,6 @@
 import { UserRole } from "@prisma/client";
 import { Request, Response, Next, AuthenticatedRequest } from "@/types/request";
-import { UserModelConfig } from "@/types/models";
+import { UserModelConfig } from "@/types/model";
 import { compareBcryptText } from "@/utils/text";
 import { createToken, verifyToken } from "@/utils/auth";
 import { filterGuardedFields, filterHiddenFields } from "@/utils/model";

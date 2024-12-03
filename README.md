@@ -8,7 +8,7 @@
 <br>
 <p align="center">
     <a href="https://github.com/berkanumutlu/challenge-nodejs-presentation-dashboard-app/stargazers" rel="nofollow"><img src="https://img.shields.io/github/stars/berkanumutlu/challenge-nodejs-presentation-dashboard-app?style=flat&logo=github" alt="Presentation Dashboard App Repo stars"></a>
-    <a href="https://github.com/berkanumutlu/challenge-nodejs-presentation-dashboard-app/blob/master/LICENSE" target="_blank" rel="nofollow"><img src="https://img.shields.io/github/license/berkanumutlu/laravel-example-app" alt="License"></a>
+    <a href="https://github.com/berkanumutlu/challenge-nodejs-presentation-dashboard-app/blob/master/LICENSE" target="_blank" rel="nofollow"><img src="https://img.shields.io/github/license/berkanumutlu/challenge-nodejs-presentation-dashboard-app" alt="Presentation Dashboard App Repo License"></a>
     <a href="https://nodejs.org" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Node.js-v20.18.0-5FA04E?logo=nodedotjs&logoColor=white&labelColor=5FA04E" alt="Node.js Version"></a>
     <a href="https://nextjs.org/docs/14" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/next-v14.2.18-black?logo=nextdotjs&logoColor=white&labelColor=black" alt="Next.JS Version"></a>
      <a href="https://18.react.dev" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/React-v18.3.1-087EA4?logo=react&logoColor=white&labelColor=087EA4" alt="React Version"></a>

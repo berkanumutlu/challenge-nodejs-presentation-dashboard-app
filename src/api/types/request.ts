@@ -18,5 +18,5 @@ export type RequestFilterType = {
     include?: Record<string, any>,
     limit?: number,
     offset?: number,
-    orderBy?: Record<string, 'asc' | 'desc'>
+    orderBy?: Record<string, 'ASC' | 'asc' | 'DESC' | 'desc'>
 };

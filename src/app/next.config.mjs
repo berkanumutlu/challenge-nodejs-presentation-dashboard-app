@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // TODO: For API connection issue
     images: {
         remotePatterns: [
             {

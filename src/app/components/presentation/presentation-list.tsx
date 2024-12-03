@@ -1,99 +1,64 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import dynamic from "next/dynamic";
+import { PresentationItemType } from "@/types/presentation";
+import { useModal } from "@/store/useModal";
+import { presentationService } from "@/lib/presentation";
 import PresentationItem from "@/components/presentation/presentation-item";
-import { RenamePresentationModal } from "@/components/modals/presentation/rename-modal";
-import { AlertModal } from "@/components/ui/alert-modal";
 import { createPresentationItemsSkeleton } from "@/components/ui/skeletons/presentation";
+import { PRESENTATION_CREATED } from "@/utils/events";
 
-interface PresentationListProps {
-    presentations: any;
-    onRename: (id: string, newName: string) => void;
-    onDelete: (id: string) => void;
-}
+const EditPresentationModal = dynamic(() => import('@/components/modals/presentation/edit-modal').then(mod => mod.EditPresentationModal), { ssr: false });
+const DeletePresentationModal = dynamic(() => import('@/components/modals/presentation/delete-modal').then(mod => mod.DeletePresentationModal), { ssr: false });
+const RestorePresentationModal = dynamic(() => import('@/components/modals/presentation/restore-modal').then(mod => mod.RestorePresentationModal), { ssr: false });
 
-export default function PresentationList({
-    presentations,
-    onRename,
-    onDelete
-}: PresentationListProps) {
-    const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
-    const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
-    const [currentPresentationId, setCurrentPresentationId] = useState<string | null>(null);
-    const [presentationToDelete, setPresentationToDelete] = useState<string | null>(null);
+export default function PresentationList() {
+    const { isModalOpen, modalName } = useModal();
+    const [presentations, setPresentations] = useState<any>(null);
 
-    const openRenameModal = (id: string) => {
-        setCurrentPresentationId(id);
-        setIsRenameModalOpen(true);
-    };
-    const closeRenameModal = () => {
-        setIsRenameModalOpen(false);
-        setCurrentPresentationId(null);
-    };
-
-    const openAlertModal = (id: string) => {
-        setPresentationToDelete(id);
-        setIsAlertModalOpen(true);
-    };
-    const closeAlertModal = () => {
-        setIsAlertModalOpen(false);
-        setPresentationToDelete(null);
-    };
-
-    const confirmDelete = () => {
-        if (presentationToDelete) {
-            onDelete(presentationToDelete);
+    const fetchPresentationsData = useCallback(async () => {
+        try {
+            const response = await presentationService.list();
+            setPresentations(response.data);
+        } catch (error) {
+            console.error('Error fetching presentations:', error);
+            setPresentations([]);
         }
-        closeAlertModal();
-    };
+    }, []);
 
-    const currentPresentation = presentations?.data?.items?.find(
-        (item: any) => item.id === currentPresentationId
-    );
+    useEffect(() => {
+        fetchPresentationsData();
+
+        window.addEventListener(PRESENTATION_CREATED, fetchPresentationsData as EventListener);
+        return () => {
+            window.removeEventListener(PRESENTATION_CREATED, fetchPresentationsData as EventListener);
+        };
+    }, [fetchPresentationsData]);
+
+    const memoizedPresentationItems = useMemo(() => {
+        return presentations?.items?.map((presentation: PresentationItemType) => (
+            <PresentationItem
+                key={presentation.id}
+                data={presentation}
+            />
+        ));
+    }, [presentations?.items]);
 
     return (
         <>
             <div className="space-y-1 mb-5">
                 <h3 className="text-sm font-medium text-tertiary">Decks</h3>
                 <h4 className="text-xs font-medium text-[#9AA0AB]">
-                    {presentations?.data?.meta?.total || 0}{" "}{presentations?.data?.meta?.total > 1 ? "files" : "file"}
+                    {presentations?.meta?.total || 0}{' '}{presentations?.meta?.total > 1 ? 'files' : 'file'}
                 </h4>
             </div>
-            <div className="flex flex-wrap gap-5 xl:gap-x-3">
-                {presentations ? (
-                    presentations.data.items.map((presentation: any) => (
-                        <PresentationItem
-                            key={presentation.id}
-                            data={presentation}
-                            onRenameClick={() => openRenameModal(presentation.id)}
-                            onDeleteClick={() => openAlertModal(presentation.id)}
-                        />
-                    ))
-                ) : (
-                    createPresentationItemsSkeleton(24)
-                )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-5 xl:gap-x-2">
+                {presentations ? memoizedPresentationItems : createPresentationItemsSkeleton(24)}
             </div>
-            {currentPresentation && (
-                <>
-                    <RenamePresentationModal
-                        isOpen={isRenameModalOpen}
-                        onClose={closeRenameModal}
-                        onRename={(newName) => {
-                            onRename(currentPresentation.id, newName);
-                            closeRenameModal();
-                        }}
-                        currentName={currentPresentation.name}
-                    />
-                </>
-            )}
-            <AlertModal
-                isOpen={isAlertModalOpen}
-                onClose={closeAlertModal}
-                onConfirm={confirmDelete}
-                title="Delete Confirmation"
-                description="Are you sure you want to delete this presentation? This action cannot be undone."
-                confirmClassName="bg-red-500 hover:bg-red-600"
-            />
+            {isModalOpen && modalName === 'EditPresentationModal' && <EditPresentationModal />}
+            {isModalOpen && modalName === 'DeletePresentationModal' && <DeletePresentationModal />}
+            {isModalOpen && modalName === 'RestorePresentationModal' && <RestorePresentationModal />}
         </>
     );
 }

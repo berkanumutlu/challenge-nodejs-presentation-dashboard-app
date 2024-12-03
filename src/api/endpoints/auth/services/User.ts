@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { UserModelConfig } from "@/types/models";
+import { UserModelConfig } from "@/types/model";
 import { encryptFields } from "@/utils/text";
 
 const prisma = new PrismaClient();
